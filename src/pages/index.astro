@@ -1,0 +1,10 @@
+---
+import HomePage from "@/components/pages/HomePage.astro";
+import { getLocalizedFeaturedPosts, getLocalizedFeaturedWork } from "@/utils/content";
+
+const locale = "en";
+const posts = await getLocalizedFeaturedPosts(locale, 4);
+const work = await getLocalizedFeaturedWork(locale, 5);
+---
+
+<HomePage locale={locale} {posts} {work} />

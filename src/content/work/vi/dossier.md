@@ -1,0 +1,90 @@
+---
+locale: vi
+title: "Dossier"
+summary: "Nền tảng Agentic Document Intelligence local-first biến tài liệu nhạy cảm thành dữ liệu có thể kiểm tra, phê duyệt và tích hợp."
+description: "Dossier là sản phẩm document intelligence hướng thương mại dành cho các doanh nghiệp xử lý PDF, scan, biểu mẫu, bảng biểu và chữ viết tay trong các workflow có rủi ro. Hệ thống kết hợp agentic OCR, provider routing, validation, repair loop, risk triage, human review và export có bằng chứng để giúp tài liệu đi từ intake đến hành động nghiệp vụ một cách có kiểm soát."
+overview: "Dossier được xây dựng như một workspace desktop-first cho các đội vận hành tài liệu trong finance, healthcare, legal/compliance và enterprise operations. Thay vì chỉ chuyển ảnh thành text, sản phẩm đọc cấu trúc tài liệu, trích xuất field theo schema, kiểm tra logic nghiệp vụ, phát hiện dấu hiệu cần review, lưu provenance và cho phép con người phê duyệt trước khi export sang hệ thống đích. Dossier hiện đang được thử nghiệm với hơn 5 doanh nghiệp để kiểm chứng workflow thực tế, khả năng giảm tải review thủ công, chất lượng risk triage và mức độ sẵn sàng cho thương mại/funding."
+problem: "Các tổ chức xử lý tài liệu nhạy cảm thường bị kẹt giữa quy trình nhập liệu thủ công và các dịch vụ OCR/AI black-box. OCR truyền thống đọc được ký tự nhưng không hiểu đầy đủ layout, bảng, quan hệ giữa field, confidence, dấu hiệu rủi ro hay bước phê duyệt. Khi đưa AI vào quy trình thật, doanh nghiệp còn cần kiểm soát dữ liệu, audit trail, human approval, chi phí model và khả năng biết rõ vì sao một kết quả được tạo ra."
+approach: "Dossier dùng kiến trúc local-first với Tauri/React desktop app, Rust desktop kernel và Python AI runtime. Pipeline sản phẩm gồm intake, Fast Probe, OCR/layout/table parsing, field extraction, validation, bounded repair loop, risk triage, human review, approval và export. Lớp provider routing cho phép thay thế hoặc phối hợp OCR, handwriting OCR, layout parser, table parser, VLM/LLM và cloud/local model theo privacy policy, latency, cost, confidence và loại tài liệu. Agentic OCR trong Dossier là một hệ thống agent có kiểm soát, có stop policy và audit, không phải automation tự trị không giới hạn."
+role: "Founder / Product Builder / Full-stack Engineer"
+period: "2026 - hiện tại"
+featured: true
+order: 3
+heroImage: "/work/dossier/invoice-review.png"
+showBody: false
+metrics:
+  - value: "5+"
+    label: "doanh nghiệp đang thử nghiệm workflow tài liệu thật"
+  - value: "Agentic OCR"
+    label: "provider routing, validation và repair loop"
+  - value: "Risk Triage"
+    label: "phát hiện tín hiệu rủi ro cần review"
+outcomes:
+  - "Đã hình thành foundation sản phẩm gồm Inbox, Documents, Quick OCR, Workspace, Review, Model Registry và Settings trong desktop app."
+  - "Xây dựng local runtime xử lý run lifecycle, artifact store, provider registry, validation, repair pass, review task, approval audit, revision và export JSON/Markdown/connector draft."
+  - "Thiết kế agentic OCR workflow với Fast Probe, provider routing, field extraction, validation, self-correction có giới hạn, risk triage và human-in-the-loop approval."
+  - "Tạo sample fixtures và demo workflow cho finance, healthcare và enterprise operations, bao gồm mismatch tổng tiền, low-confidence field, handwriting scenario và approval-required documents."
+  - "Đang được thử nghiệm với 5+ doanh nghiệp nhằm cải thiện workflow tài liệu thực tế và tiến gần hơn tới commercial pilots, funding và triển khai thương mại."
+links:
+  - label: "GitHub"
+    href: "https://github.com/kyoo-147/Dossier"
+    note: "Mã nguồn mới nhất và một số phần triển khai thương mại có thể chưa được công khai đầy đủ do vấn đề phiên bản, dữ liệu thử nghiệm, đối tác doanh nghiệp và quyền riêng tư."
+highlights:
+  - title: "Quick OCR"
+    description: "Chạy OCR nhanh cho PDF hoặc ảnh đơn lẻ, giúp kiểm tra chất lượng trích xuất trước khi đưa tài liệu vào workflow đầy đủ."
+    src: "/work/dossier/quick-ocr.png"
+  - title: "Processing workspace"
+    description: "Theo dõi pipeline xử lý, trạng thái run, artifact, lỗi cần repair và các bước review theo từng tài liệu."
+    src: "/work/dossier/processing.png"
+  - title: "Model registry"
+    description: "Quản lý provider/model, routing policy, chi phí, độ trễ và năng lực OCR, VLM, LLM theo từng loại tài liệu."
+    src: "/work/dossier/models.png"
+  - title: "Document catalog"
+    description: "Tổ chức tài liệu, kết quả OCR, metadata, trạng thái phê duyệt và evidence để đội vận hành có thể kiểm tra lại."
+    src: "/work/dossier/documents.png"
+timeline:
+  - date: "01.2026"
+    label: "Product discovery và định vị Document Intelligence"
+  - date: "02.2026"
+    label: "Local-first architecture với Tauri, Rust kernel và Python runtime"
+  - date: "03.2026"
+    label: "Agentic OCR pipeline, provider routing và shared contracts"
+  - date: "04.2026"
+    label: "Validation, repair loop, review queue và approval/export flow"
+  - date: "05.2026"
+    label: "Finance, healthcare và enterprise fixtures"
+  - date: "Hiện tại"
+    label: "5+ business trials, commercial pilots và funding preparation"
+storyBlocks:
+  - title: "Không chỉ OCR"
+    body: "Dossier bắt đầu từ nhận định rằng OCR chỉ là một bước nhỏ trong workflow tài liệu. Doanh nghiệp cần biết field nào đáng tin, field nào cần review, kết quả đến từ vùng nào của tài liệu và ai đã phê duyệt trước khi dữ liệu đi tiếp."
+  - title: "Agentic nhưng có kiểm soát"
+    body: "Các agent trong Dossier là vai trò logic trong pipeline: probe, route provider, extract field, validate, retry và tạo review task. Mỗi bước có giới hạn, sự kiện, artifact và stop policy để tránh automation mù."
+  - title: "Rủi ro là một phần sản phẩm"
+    body: "Dossier không tuyên bố kết luận tài liệu thật hay giả. Sản phẩm tập trung vào risk triage: phát hiện mismatch, field confidence thấp, dữ liệu thiếu hoặc bất thường và đưa đúng phần đó sang con người kiểm tra."
+  - title: "Từ thử nghiệm đến thương mại"
+    body: "Sản phẩm đang được thử nghiệm với hơn 5 doanh nghiệp để kiểm chứng khả năng xử lý tài liệu thật, giảm thao tác thủ công, chuẩn hóa review và tạo nền tảng cho các vòng thương mại, pilot trả phí và funding."
+gallery:
+  - label: "Inbox"
+    src: "/work/dossier/inbox.png"
+  - label: "Settings"
+    src: "/work/dossier/settings.png"
+  - label: "Dossier product workflow"
+    src: "/work/dossier/product-workflow.png"
+  - label: "Agentic OCR pipeline"
+    src: "/work/dossier/agentic-ocr-pipeline.png"
+  - label: "Local-first runtime architecture"
+    src: "/work/dossier/local-first-runtime-architecture.png"
+  - label: "Evidence-backed field extraction"
+    src: "/work/dossier/evidence-backed-field-extraction.png"
+  - label: "Validation, repair and human review loop"
+    src: "/work/dossier/validation-repair-human-review-loop.png"
+  - label: "Domain use case matrix"
+    src: "/work/dossier/domain-use-case-matrix.png"
+  - label: "Model/provider routing strategy"
+    src: "/work/dossier/model-provider-routing-strategy.png"
+---
+
+## Context
+
+Dossier là nền tảng Agentic Document Intelligence local-first dành cho các workflow tài liệu nhạy cảm, nơi kết quả OCR phải đi kèm validation, evidence, human review và khả năng export có kiểm soát.

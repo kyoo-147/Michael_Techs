@@ -1,0 +1,28 @@
+---
+export interface Props {
+  title: string;
+  href?: string;
+  label?: string;
+}
+
+const { title, href, label = "Learn more" } = Astro.props;
+---
+
+<div class="mb-6">
+  <div class={`flex items-center ${href ? "justify-between gap-6" : ""}`}>
+    <h2 class="site-section-title !mb-0 min-w-0">{title}</h2>
+    {
+      href ? (
+        <a
+          href={href}
+          class="inline-flex shrink-0 items-center whitespace-nowrap text-[0.78rem] font-medium leading-none text-subtle-foreground underline-offset-4 transition hover:text-accent hover:underline"
+          aria-label={label}
+          title={label}
+        >
+          {label}
+        </a>
+      ) : null
+    }
+  </div>
+  <div class="mt-5 h-px w-9 bg-accent-soft"></div>
+</div>

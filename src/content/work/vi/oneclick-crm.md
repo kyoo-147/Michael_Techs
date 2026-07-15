@@ -1,0 +1,93 @@
+---
+locale: vi
+title: "YI-OneClick"
+summary: "Nền tảng AI workflow giúp doanh nghiệp vận hành lead, khách hàng, inbox, automation và AI agent trong một hệ thống thống nhất."
+description: "YI-OneClick là nền tảng workflow và vận hành khách hàng có tích hợp AI, tập trung vào việc biến các quy trình lặp lại trong doanh nghiệp thành các luồng tự động có thể kiểm soát, đo chi phí và giám sát được."
+overview: "YI-OneClick được thiết kế như một lớp vận hành cho doanh nghiệp vừa và nhỏ: quản lý khách hàng, dashboard vận hành, thư viện workflow, inbox tập trung và trung tâm AI. Thay vì chỉ là một công cụ nhập liệu, sản phẩm hướng đến việc để AI tham gia vào quy trình thật: phân loại tác vụ, gợi ý bước tiếp theo, hỗ trợ soạn phản hồi, điều phối workflow và theo dõi chi phí sử dụng model."
+problem: "Nhiều đội ngũ nhỏ đang xử lý khách hàng, tin nhắn, workflow và dữ liệu nội bộ trên nhiều công cụ rời rạc. Khi bắt đầu đưa AI vào vận hành, vấn đề không chỉ là gọi model, mà là quyền truy cập dữ liệu, luồng phê duyệt, chi phí, độ trễ, lịch sử chạy và khả năng kiểm soát tác vụ."
+approach: "Hệ thống được xây dựng quanh Next.js, Node.js, PostgreSQL và Redis, với hướng tiếp cận workflow theo event và state. Lớp AI Gateway chịu trách nhiệm routing model, fallback, theo dõi chi phí và quan sát chất lượng. Các workflow được tổ chức thành template dễ dùng hơn các công cụ tự động hóa kỹ thuật, nhưng vẫn giữ được log, quyền, phê duyệt và khả năng mở rộng tích hợp."
+role: "Founder · Product Builder · Full Stack Developer"
+period: "2025"
+featured: true
+order: 2
+heroImage: "/work/oneclick/workflow-ai-builder.png"
+showBody: false
+metrics:
+  - value: "AI CRM"
+    label: "dashboard vận hành, inbox và AI Center"
+  - value: "Workflow Builder"
+    label: "events, retry, approval và run history"
+  - value: "AI Gateway"
+    label: "routing, fallback, cost và latency control"
+outcomes:
+  - "Xây dựng được foundation sản phẩm gồm dashboard vận hành, workflow builder, workflow library, inbox và AI Center."
+  - "Thiết kế hướng AI Gateway để routing giữa model, kiểm soát chi phí, fallback và đo latency/chất lượng theo từng tác vụ."
+  - "Định hình workflow engine theo event/state để phục vụ automation thật, có run history, retry, approval gate và audit log."
+  - "Tập trung vào bài toán thực tế của SMB: giảm thao tác lặp lại, gom dữ liệu vận hành và giúp đội ngũ triển khai AI workflow dễ hơn."
+links:
+  - label: "GitHub"
+    href: "#"
+    note: "Mã nguồn mới nhất chưa thể công khai đầy đủ do các vấn đề về phiên bản, thương mại và quyền riêng tư."
+highlights:
+  - src: "/work/oneclick/dashboard.png"
+    title: "Operations dashboard"
+    description: "Theo dõi trạng thái pipeline, hiệu suất workflow và các chỉ số vận hành chính trong một màn hình."
+  - src: "/work/oneclick/workflow-library.png"
+    title: "Workflow library"
+    description: "Thư viện workflow mẫu giúp đội ngũ triển khai automation nhanh hơn mà không phải bắt đầu từ con số không."
+  - src: "/work/oneclick/inbox.png"
+    title: "Unified inbox"
+    description: "Gom hội thoại và tác vụ khách hàng vào một nơi để AI có thể hỗ trợ phân loại, phản hồi và điều phối."
+  - src: "/work/oneclick/ai-center.png"
+    title: "AI Center"
+    description: "Trung tâm cấu hình AI agent, model routing, tác vụ thông minh và lớp kiểm soát chi phí."
+timeline:
+  - date: "2025"
+    label: "Product foundation"
+  - date: "2025"
+    label: "Workflow builder"
+  - date: "2025"
+    label: "AI Gateway"
+  - date: "2025"
+    label: "Inbox and automation"
+  - date: "2026"
+    label: "Operational pilots"
+storyBlocks:
+  - title: "AI phải đi vào quy trình thật"
+    body: "YI-OneClick không xem AI như một chatbot đặt cạnh sản phẩm. AI được đặt vào các bước vận hành: đọc ngữ cảnh, phân loại, đề xuất hành động, chạy workflow và để con người duyệt các bước nhạy cảm."
+  - title: "Workflow cần dễ dùng hơn"
+    body: "Các công cụ automation mạnh thường đòi hỏi tư duy kỹ thuật. OneClick hướng đến template và builder thân thiện hơn, nhưng vẫn giữ run history, retry, permission và audit."
+  - title: "Chi phí là một phần của kiến trúc"
+    body: "Model mạnh nhất không phải lúc nào cũng là lựa chọn tốt nhất. Hệ thống cần routing, fallback, tracking chi phí và quan sát chất lượng để tối ưu theo từng loại tác vụ."
+  - title: "Từ dữ liệu đến vận hành"
+    body: "Dashboard, inbox, workflow và AI Center được nối lại để doanh nghiệp không chỉ lưu dữ liệu, mà còn biến dữ liệu đó thành hành động có thể theo dõi."
+gallery:
+  - src: "/work/oneclick/workflow-ai-builder.png"
+    label: "Workflow AI builder"
+  - src: "/work/oneclick/dashboard.png"
+    label: "Dashboard"
+  - src: "/work/oneclick/workflow-library.png"
+    label: "Workflow library"
+  - src: "/work/oneclick/inbox.png"
+    label: "Inbox"
+  - src: "/work/oneclick/ai-center.png"
+    label: "AI Center"
+  - src: "/work/oneclick/system-architecture.png"
+    label: "System architecture"
+  - src: "/work/oneclick/data-model.png"
+    label: "Data model"
+  - src: "/work/oneclick/event-workflow-engine.png"
+    label: "Event-driven workflow engine"
+  - src: "/work/oneclick/ai-gateway-model-routing.png"
+    label: "AI Gateway and model routing"
+  - src: "/work/oneclick/multi-tenant-permission-model.png"
+    label: "Multi-tenant permission model"
+  - src: "/work/oneclick/cost-observability-layer.png"
+    label: "Cost and observability layer"
+  - src: "/work/oneclick/ai-business-workflows.png"
+    label: "AI applied to business workflows"
+---
+
+## Context
+
+YI-OneClick là nền tảng workflow và vận hành khách hàng có tích hợp AI, tập trung vào việc biến các quy trình lặp lại trong doanh nghiệp thành các luồng tự động có thể kiểm soát, đo chi phí và giám sát được.

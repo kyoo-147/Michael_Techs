@@ -1,0 +1,93 @@
+---
+locale: zh-cn
+title: "YI-OneClick"
+summary: "一个用于统一管理客户、收件箱、自动化流程和 AI Agent 的 AI 工作流平台。"
+description: "YI-OneClick 是一个结合 AI 的工作流与客户运营平台，目标是把企业中的重复流程变成可控制、可观测、可追踪成本的自动化系统。"
+overview: "YI-OneClick 被设计为中小企业的运营层：客户运营、数据看板、工作流模板库、统一收件箱和 AI Center。它不只是录入数据的工具，而是让 AI 进入真实流程：任务分类、下一步建议、回复辅助、工作流编排，以及模型成本跟踪。"
+problem: "小型团队经常在多个分散工具中管理客户、消息、流程和内部数据。当 AI 被加入运营流程后，真正困难的不只是调用模型，而是数据权限、审批流程、成本、延迟、运行历史和可控性。"
+approach: "系统基于 Next.js、Node.js、PostgreSQL 和 Redis 构建，并采用事件驱动与状态化的工作流思路。AI Gateway 负责模型路由、fallback、成本跟踪以及质量和延迟观测。工作流以模板方式组织，比技术型自动化工具更容易使用，同时保留日志、权限、审批和集成扩展能力。"
+role: "Founder · Product Builder · Full Stack Developer"
+period: "2025"
+featured: true
+order: 2
+heroImage: "/work/oneclick/workflow-ai-builder.png"
+showBody: false
+metrics:
+  - value: "AI CRM"
+    label: "operations dashboard, inbox, and AI Center"
+  - value: "Workflow Builder"
+    label: "events, retries, approvals, and run history"
+  - value: "AI Gateway"
+    label: "routing, fallback, cost, and latency control"
+outcomes:
+  - "完成了产品基础层，包括运营看板、workflow builder、workflow library、inbox 和 AI Center。"
+  - "设计了 AI Gateway 方向，用于模型路由、成本控制、fallback，以及按任务类型跟踪延迟和质量。"
+  - "将 workflow engine 按事件与状态组织，使自动化可以支持运行历史、重试、审批门和审计日志。"
+  - "聚焦中小企业的真实运营问题：减少重复工作、集中运营数据，并降低 AI workflow 的部署门槛。"
+links:
+  - label: "GitHub"
+    href: "#"
+    note: "由于版本、商业和隐私限制，最新源代码目前还无法完整公开。"
+highlights:
+  - src: "/work/oneclick/dashboard.png"
+    title: "Operations dashboard"
+    description: "在一个视图中跟踪 pipeline 状态、workflow 表现和关键运营指标。"
+  - src: "/work/oneclick/workflow-library.png"
+    title: "Workflow library"
+    description: "通过预置工作流模板，让团队更快部署自动化，而不是从空白开始。"
+  - src: "/work/oneclick/inbox.png"
+    title: "Unified inbox"
+    description: "集中客户对话和任务，让 AI 可以辅助分类、回复和分配工作。"
+  - src: "/work/oneclick/ai-center.png"
+    title: "AI Center"
+    description: "用于配置 AI Agent、模型路由、智能任务和成本控制的中心。"
+timeline:
+  - date: "2025"
+    label: "Product foundation"
+  - date: "2025"
+    label: "Workflow builder"
+  - date: "2025"
+    label: "AI Gateway"
+  - date: "2025"
+    label: "Inbox and automation"
+  - date: "2026"
+    label: "Operational pilots"
+storyBlocks:
+  - title: "AI 应该进入真实流程"
+    body: "YI-OneClick 不把 AI 当成产品旁边的聊天框。AI 被放进运营步骤中：读取上下文、分类任务、建议动作、运行 workflow，并把敏感步骤交给人审批。"
+  - title: "Workflow 必须更容易使用"
+    body: "强大的自动化工具通常需要技术思维。OneClick 更偏向模板和友好的 builder，同时保留运行历史、重试、权限和审计。"
+  - title: "成本是架构的一部分"
+    body: "最强的模型不一定是最好的选择。系统需要 routing、fallback、成本跟踪和质量观测，按任务类型优化。"
+  - title: "从数据到运营动作"
+    body: "Dashboard、inbox、workflow 和 AI Center 被连接起来，让企业不只是存储数据，而是把数据转化为可追踪的动作。"
+gallery:
+  - src: "/work/oneclick/workflow-ai-builder.png"
+    label: "Workflow AI builder"
+  - src: "/work/oneclick/dashboard.png"
+    label: "Dashboard"
+  - src: "/work/oneclick/workflow-library.png"
+    label: "Workflow library"
+  - src: "/work/oneclick/inbox.png"
+    label: "Inbox"
+  - src: "/work/oneclick/ai-center.png"
+    label: "AI Center"
+  - src: "/work/oneclick/system-architecture.png"
+    label: "System architecture"
+  - src: "/work/oneclick/data-model.png"
+    label: "Data model"
+  - src: "/work/oneclick/event-workflow-engine.png"
+    label: "Event-driven workflow engine"
+  - src: "/work/oneclick/ai-gateway-model-routing.png"
+    label: "AI Gateway and model routing"
+  - src: "/work/oneclick/multi-tenant-permission-model.png"
+    label: "Multi-tenant permission model"
+  - src: "/work/oneclick/cost-observability-layer.png"
+    label: "Cost and observability layer"
+  - src: "/work/oneclick/ai-business-workflows.png"
+    label: "AI applied to business workflows"
+---
+
+## Context
+
+YI-OneClick 是一个结合 AI 的工作流与客户运营平台，目标是把企业中的重复流程变成可控制、可观测、可追踪成本的自动化系统。

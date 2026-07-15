@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE } from "@/i18n/config";
+import { getLocalizedPath } from "@/i18n/utils";
+import { getPostSlug } from "@/utils/content";
+import Datetime from "./Datetime.astro";
+
+export interface Props {
+  entry: CollectionEntry<"blog">;
+  locale?: Locale;
+}
+
+const { entry, locale = DEFAULT_LOCALE } = Astro.props;
+const href = getLocalizedPath(locale, `/posts/${getPostSlug(entry.id)}`);
+---
+
+<li class="border-t border-border py-5 first:border-t-0">
+  <a href={href} class="grid gap-3 md:grid-cols-[88px_1fr_24px] md:items-start">
+    <div class="text-[0.8rem] uppercase tracking-[0.18em] text-subtle-foreground">
+      <Datetime pubDatetime={entry.data.pubDatetime} modDatetime={entry.data.modDatetime} locale={locale} />
+    </div>
+    <div>
+      <h3 class="text-[1.18rem] font-semibold tracking-[-0.01em] text-foreground transition hover:text-accent">
+        {entry.data.title}
+      </h3>
+      <p class="mt-1 max-w-[52ch] text-sm leading-7 text-muted-foreground">
+        {entry.data.description}
+      </p>
+    </div>
+    <div class="hidden text-right text-lg text-subtle-foreground md:block">&rarr;</div>
+  </a>
+</li>

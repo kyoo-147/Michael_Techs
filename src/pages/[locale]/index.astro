@@ -1,0 +1,15 @@
+---
+import HomePage from "@/components/pages/HomePage.astro";
+import { NON_DEFAULT_LOCALES } from "@/i18n/config";
+import { getLocalizedFeaturedPosts, getLocalizedFeaturedWork } from "@/utils/content";
+
+export async function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map(locale => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as "vi" | "zh-cn";
+const posts = await getLocalizedFeaturedPosts(locale, 4);
+const work = await getLocalizedFeaturedWork(locale, 5);
+---
+
+<HomePage locale={locale} {posts} {work} />

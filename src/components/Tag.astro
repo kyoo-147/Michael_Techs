@@ -1,0 +1,22 @@
+---
+import type { Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE } from "@/i18n/config";
+import { getLocalizedPath } from "@/i18n/utils";
+
+export interface Props {
+  tag: string;
+  tagName: string;
+  locale?: Locale;
+}
+
+const { tag, tagName, locale = DEFAULT_LOCALE } = Astro.props;
+---
+
+<li class="inline-flex">
+  <a
+    href={getLocalizedPath(locale, `/tags/${tag}`)}
+    class="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground transition hover:border-border-strong hover:text-accent"
+  >
+    {tagName}
+  </a>
+</li>

@@ -1,0 +1,90 @@
+---
+locale: en
+title: "Dossier"
+summary: "A local-first Agentic Document Intelligence platform that turns sensitive documents into reviewable, approved, and integration-ready structured data."
+description: "Dossier is a commercial document intelligence product for teams processing PDFs, scans, forms, tables, and handwriting in risk-sensitive workflows. It combines agentic OCR, provider routing, validation, bounded repair loops, risk triage, human review, and evidence-backed export so documents can move from intake to business action with control."
+overview: "Dossier is built as a desktop-first workspace for document operations teams in finance, healthcare, legal/compliance, and enterprise operations. Instead of stopping at OCR text, the product understands document structure, extracts schema-aligned fields, validates business logic, detects review-worthy risk signals, preserves provenance, and keeps humans in control before export. Dossier is currently being tested with 5+ businesses to validate real-world workflows, manual review reduction, risk triage quality, and readiness for commercial pilots and funding."
+problem: "Organizations that process sensitive documents are often stuck between manual data entry and black-box OCR or AI services. Traditional OCR can read characters, but it does not fully handle layout, tables, field relationships, confidence, risk signals, or approval workflows. Once AI enters a real operational process, customers also need data control, audit trails, human approval, model cost control, and a clear record of how each result was produced."
+approach: "Dossier uses a local-first architecture with a Tauri/React desktop app, Rust desktop kernel, and Python AI runtime. The product pipeline covers intake, Fast Probe, OCR/layout/table parsing, field extraction, validation, bounded repair loops, risk triage, human review, approval, and export. A provider routing layer can swap or combine OCR, handwriting OCR, layout parsers, table parsers, VLM/LLM providers, and local/cloud models based on privacy policy, latency, cost, confidence, and document type. Agentic OCR in Dossier is governed orchestration with stop policies and auditability, not unbounded autonomous automation."
+role: "Founder / Product Builder / Full-stack Engineer"
+period: "2026 - present"
+featured: true
+order: 3
+heroImage: "/work/dossier/invoice-review.png"
+showBody: false
+metrics:
+  - value: "5+"
+    label: "businesses testing real document workflows"
+  - value: "Agentic OCR"
+    label: "provider routing, validation, and repair loops"
+  - value: "Risk Triage"
+    label: "flags review-worthy document signals"
+outcomes:
+  - "Built the product foundation across Inbox, Documents, Quick OCR, Workspace, Review, Model Registry, and Settings in the desktop application."
+  - "Implemented a local runtime for run lifecycle, artifact storage, provider registry, validation, repair pass, review tasks, approval audit, revisions, and JSON/Markdown/connector-draft export."
+  - "Designed an agentic OCR workflow with Fast Probe, provider routing, field extraction, validation, bounded self-correction, risk triage, and human-in-the-loop approval."
+  - "Created sample fixtures and demo workflows for finance, healthcare, and enterprise operations, including amount mismatch, low-confidence fields, handwriting scenarios, and approval-required documents."
+  - "Currently being tested with 5+ businesses to improve real document workflows and move closer to commercial pilots, funding, and production deployment."
+links:
+  - label: "GitHub"
+    href: "https://github.com/kyoo-147/Dossier"
+    note: "The latest source and some commercial implementation details may not be fully public yet because of versioning, pilot data, enterprise partner, and privacy considerations."
+highlights:
+  - title: "Quick OCR"
+    description: "Run lightweight OCR on a PDF or single image before moving a document into the full governed workflow."
+    src: "/work/dossier/quick-ocr.png"
+  - title: "Processing workspace"
+    description: "Track pipeline state, run events, artifacts, repair needs, and review steps for each document."
+    src: "/work/dossier/processing.png"
+  - title: "Model registry"
+    description: "Manage providers, model routing policies, cost, latency, and OCR/VLM/LLM capabilities by document type."
+    src: "/work/dossier/models.png"
+  - title: "Document catalog"
+    description: "Organize documents, OCR results, metadata, approval status, and evidence for operational review."
+    src: "/work/dossier/documents.png"
+timeline:
+  - date: "01.2026"
+    label: "Product discovery and Document Intelligence positioning"
+  - date: "02.2026"
+    label: "Local-first architecture with Tauri, Rust kernel, and Python runtime"
+  - date: "03.2026"
+    label: "Agentic OCR pipeline, provider routing, and shared contracts"
+  - date: "04.2026"
+    label: "Validation, repair loop, review queue, and approval/export flow"
+  - date: "05.2026"
+    label: "Finance, healthcare, and enterprise fixtures"
+  - date: "Present"
+    label: "5+ business trials, commercial pilots, and funding preparation"
+storyBlocks:
+  - title: "Beyond OCR"
+    body: "Dossier starts from the idea that OCR is only a small part of the document workflow. Businesses need to know which fields are reliable, which fields need review, where the value came from, and who approved it before the data moves downstream."
+  - title: "Agentic but governed"
+    body: "Agents in Dossier are logical pipeline roles: probe, route providers, extract fields, validate, retry, and create review tasks. Each step has limits, events, artifacts, and stop policies so automation remains inspectable."
+  - title: "Risk as product surface"
+    body: "Dossier does not claim to make forensic truth judgments. It focuses on risk triage: detecting mismatches, low-confidence fields, missing data, or unusual values and routing the right evidence to human review."
+  - title: "From trials to commercialization"
+    body: "The product is being tested with 5+ businesses to validate real document handling, reduce manual work, standardize review, and prepare for commercial pilots, paid deployments, and funding conversations."
+gallery:
+  - label: "Inbox"
+    src: "/work/dossier/inbox.png"
+  - label: "Settings"
+    src: "/work/dossier/settings.png"
+  - label: "Dossier product workflow"
+    src: "/work/dossier/product-workflow.png"
+  - label: "Agentic OCR pipeline"
+    src: "/work/dossier/agentic-ocr-pipeline.png"
+  - label: "Local-first runtime architecture"
+    src: "/work/dossier/local-first-runtime-architecture.png"
+  - label: "Evidence-backed field extraction"
+    src: "/work/dossier/evidence-backed-field-extraction.png"
+  - label: "Validation, repair and human review loop"
+    src: "/work/dossier/validation-repair-human-review-loop.png"
+  - label: "Domain use case matrix"
+    src: "/work/dossier/domain-use-case-matrix.png"
+  - label: "Model/provider routing strategy"
+    src: "/work/dossier/model-provider-routing-strategy.png"
+---
+
+## Context
+
+Dossier is a local-first Agentic Document Intelligence platform for sensitive document workflows where OCR output must be validated, evidence-backed, reviewed, and exported with control.

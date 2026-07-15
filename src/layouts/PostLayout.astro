@@ -1,0 +1,191 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { SITE } from "@/config";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import type { Locale } from "@/i18n/config";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { getPostSlug } from "@/utils/content";
+import Layout from "./Layout.astro";
+import { calculateReadingTime } from "@/utils/readingTime";
+
+type Props = {
+  locale: Locale;
+  post: CollectionEntry<"blog">;
+};
+
+const { locale, post } = Astro.props;
+const t = useTranslations(locale);
+const canonicalURL = new URL(getLocalizedPath(locale, `/posts/${getPostSlug(post.id)}`), Astro.site);
+
+const allPosts = await getCollection(
+  "blog",
+  entry => !entry.data.draft && entry.data.source === "michael" && (entry.data.locale ?? "en") === locale
+);
+allPosts.sort((a, b) => b.data.pubDatetime.valueOf() - a.data.pubDatetime.valueOf());
+const currentIndex = allPosts.findIndex(p => p.id === post.id);
+const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+
+const readTime = calculateReadingTime(post.body);
+const dateString = post.data.pubDatetime.toLocaleDateString(
+  locale === "vi" ? "vi-VN" : locale === "zh-cn" ? "zh-CN" : "en-US",
+  {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }
+);
+
+const shareUrl = encodeURIComponent(canonicalURL.href);
+const shareTitle = encodeURIComponent(post.data.title);
+
+const prevLabel = locale === "vi" ? "Bài trước" : locale === "zh-cn" ? "上一篇" : "Previous Post";
+const nextLabel = locale === "vi" ? "Bài tiếp theo" : locale === "zh-cn" ? "下一篇" : "Next Post";
+const shareLabel =
+  locale === "vi" ? "Chia sẻ bài viết này:" : locale === "zh-cn" ? "分享这篇文章:" : "Share this post on:";
+const backToTopLabel = locale === "vi" ? "Lên đầu trang" : locale === "zh-cn" ? "回到顶部" : "Back to Top";
+---
+
+<Layout
+  title={`${post.data.title} | ${SITE.title}`}
+  description={post.data.description}
+  canonicalURL={canonicalURL}
+  locale={locale}
+>
+  <Header locale={locale} switcherPathname={getLocalizedPath(locale, `/posts/${getPostSlug(post.id)}`)} />
+  <main class="site-shell pb-16 pt-10">
+    <article class="mx-auto max-w-[760px] content-width" data-pagefind-body>
+      <div class="mb-8">
+        <h1
+          data-pagefind-meta="title"
+          data-pagefind-weight="10"
+          class="mb-6 font-mono text-[2.2rem] font-bold leading-[1.15] tracking-tight text-[#15803d] dark:text-accent md:text-[2.8rem]"
+        >
+          {post.data.title}
+        </h1>
+
+        <div class="flex flex-wrap items-center gap-4 font-mono text-[0.9rem] text-subtle-foreground">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              {dateString}
+            </span>
+            <span class="opacity-50">•</span>
+            <span>{readTime}</span>
+          </div>
+        </div>
+      </div>
+
+      {post.data.heroImage && (
+        <div class="mb-12 w-full overflow-hidden rounded-[4px] border border-border bg-black">
+          <img
+            src={post.data.heroImage}
+            alt={post.data.title}
+            class="aspect-[16/9] w-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      )}
+
+      <div
+        data-pagefind-weight="1.5"
+        class="prose max-w-none font-mono text-[0.95rem] leading-[1.8] text-foreground/90 md:text-[1rem]"
+      >
+        <slot />
+      </div>
+
+      <div class="mt-16 rounded-xl border border-border bg-surface-secondary p-6 shadow-sm md:p-8">
+        <p class="mb-4 font-mono text-[0.95rem] text-foreground">
+          New posts, shipping stories, and nerdy links straight to your inbox.
+        </p>
+        <form class="flex flex-col gap-4 sm:flex-row" onsubmit="event.preventDefault()">
+          <input
+            type="text"
+            placeholder="Your Name"
+            class="flex-1 rounded-md border border-border bg-surface px-4 py-2.5 font-mono text-foreground focus:border-accent focus:outline-none"
+          />
+          <input
+            type="email"
+            placeholder="Your Email"
+            class="flex-1 rounded-md border border-border bg-surface px-4 py-2.5 font-mono text-foreground focus:border-accent focus:outline-none"
+          />
+          <button
+            type="submit"
+            class="whitespace-nowrap rounded-md bg-[#15803d] px-6 py-2.5 font-mono font-medium text-white transition-all hover:bg-[#166534]"
+          >
+            Subscribe
+          </button>
+        </form>
+        <p class="mt-4 font-mono text-[0.85rem] text-subtle-foreground">2x per month, pure signal, zero fluff.</p>
+      </div>
+
+      <hr class="my-10 border-t border-dashed border-border" />
+
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-3 font-mono text-[0.95rem]">
+        {post.data.tags.map(tag => (
+          <a
+            href={getLocalizedPath(locale, `/tags/${tag}`)}
+            class="border-b border-dashed border-subtle-foreground text-foreground transition-colors hover:border-accent hover:text-accent"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+
+      <div class="mt-12 flex flex-wrap items-center justify-between gap-6 border-b border-border pb-6">
+        <div class="flex items-center gap-4">
+          <span class="font-serif text-[1.05rem] italic text-subtle-foreground">{shareLabel}</span>
+          <div class="flex items-center gap-3 text-foreground/70">
+            <a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`} target="_blank" class="transition-colors hover:text-foreground" title="Share on X">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+            </a>
+            <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`} target="_blank" class="transition-colors hover:text-foreground" title="Share on LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a href={`https://www.facebook.com/sharer.php?u=${shareUrl}`} target="_blank" class="transition-colors hover:text-foreground" title="Share on Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href={`mailto:?subject=${shareTitle}&body=${shareUrl}`} class="transition-colors hover:text-foreground" title="Share via Email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </a>
+          </div>
+        </div>
+        <button
+          onclick="window.scrollTo({top:0, behavior:'smooth'})"
+          class="flex cursor-pointer items-center gap-1.5 border-none bg-transparent font-mono text-[0.9rem] text-foreground transition-colors hover:text-accent"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+          {backToTopLabel}
+        </button>
+      </div>
+
+      <div class="mt-8 flex flex-col justify-between gap-6 font-mono text-[0.9rem] sm:flex-row">
+        <div class="flex-1">
+          {prevPost && (
+            <a href={getLocalizedPath(locale, `/posts/${getPostSlug(prevPost.id)}`)} class="group flex flex-col items-start gap-1">
+              <span class="flex items-center gap-1.5 text-subtle-foreground">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-x-1"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                {prevLabel}
+              </span>
+              <span class="line-clamp-2 text-[#15803d] group-hover:underline dark:text-accent">{prevPost.data.title}</span>
+            </a>
+          )}
+        </div>
+        <div class="flex-1 sm:text-right">
+          {nextPost && (
+            <a href={getLocalizedPath(locale, `/posts/${getPostSlug(nextPost.id)}`)} class="group flex flex-col gap-1 sm:items-end">
+              <span class="flex items-center gap-1.5 text-subtle-foreground">
+                {nextLabel}
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+              <span class="line-clamp-2 text-[#15803d] group-hover:underline dark:text-accent sm:text-right">{nextPost.data.title}</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </article>
+  </main>
+  <Footer locale={locale} />
+</Layout>

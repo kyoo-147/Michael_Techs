@@ -1,0 +1,41 @@
+---
+import type { Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE } from "@/i18n/config";
+import { useTranslations } from "@/i18n/utils";
+
+export interface Props {
+  class?: string;
+  locale?: Locale;
+  pubDatetime: string | Date;
+  modDatetime?: string | Date | null;
+}
+
+const {
+  pubDatetime,
+  modDatetime,
+  class: className = "",
+  locale = DEFAULT_LOCALE,
+} = Astro.props;
+
+const t = useTranslations(locale);
+const latestDatetime =
+  modDatetime && new Date(modDatetime) > new Date(pubDatetime)
+    ? modDatetime
+    : pubDatetime;
+
+const formatter = new Intl.DateTimeFormat(locale === "zh-cn" ? "zh-CN" : locale, {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+
+const date = formatter.format(new Date(latestDatetime));
+const isUpdated =
+  !!modDatetime && new Date(modDatetime).getTime() > new Date(pubDatetime).getTime();
+---
+
+<div class:list={["text-sm text-subtle-foreground", className]}>
+  <time datetime={new Date(latestDatetime).toISOString()}>
+    {isUpdated ? `${t.post.updated}: ${date}` : date}
+  </time>
+</div>

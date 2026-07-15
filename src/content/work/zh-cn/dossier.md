@@ -1,0 +1,90 @@
+---
+locale: zh-cn
+title: "Dossier"
+summary: "一个 local-first 的 Agentic Document Intelligence 平台，将敏感文档转化为可审核、可批准、可集成的结构化数据。"
+description: "Dossier 是一个面向商业化的文档智能产品，服务于需要处理 PDF、扫描件、表单、表格和手写内容的高风险业务流程。它结合 agentic OCR、provider routing、validation、bounded repair loop、risk triage、human review 和 evidence-backed export，让文档可以在受控条件下从 intake 进入业务动作。"
+overview: "Dossier 被设计为一个 desktop-first workspace，面向 finance、healthcare、legal/compliance 和 enterprise operations 中的文档运营团队。它不只是输出 OCR 文本，而是理解文档结构，按 schema 提取字段，校验业务逻辑，发现需要 review 的风险信号，保留 provenance，并在 export 前保留 human approval。Dossier 目前正在与 5+ 家企业进行试验，用于验证真实文档 workflow、减少人工 review、评估 risk triage 质量，并推进 commercial pilots 与 funding readiness。"
+problem: "处理敏感文档的组织通常夹在人工录入和 black-box OCR/AI 服务之间。传统 OCR 能识别字符，但难以完整处理 layout、table、字段关系、confidence、风险信号和审批流程。当 AI 真正进入业务流程后，客户还需要数据控制、audit trail、human approval、模型成本管理，以及每个结果如何产生的清晰记录。"
+approach: "Dossier 采用 local-first 架构，由 Tauri/React desktop app、Rust desktop kernel 和 Python AI runtime 组成。产品 pipeline 覆盖 intake、Fast Probe、OCR/layout/table parsing、field extraction、validation、bounded repair loop、risk triage、human review、approval 和 export。Provider routing 层可以根据 privacy policy、latency、cost、confidence 和文档类型，切换或组合 OCR、handwriting OCR、layout parser、table parser、VLM/LLM provider 以及 local/cloud model。Dossier 中的 agentic OCR 是带有 stop policy 和 auditability 的受控编排，而不是无边界的自主自动化。"
+role: "Founder / Product Builder / Full-stack Engineer"
+period: "2026 - 至今"
+featured: true
+order: 3
+heroImage: "/work/dossier/invoice-review.png"
+showBody: false
+metrics:
+  - value: "5+"
+    label: "businesses testing real document workflows"
+  - value: "Agentic OCR"
+    label: "provider routing, validation, and repair loops"
+  - value: "Risk Triage"
+    label: "flags review-worthy document signals"
+outcomes:
+  - "在 desktop application 中建立了 Inbox、Documents、Quick OCR、Workspace、Review、Model Registry 和 Settings 等产品基础。"
+  - "实现了 local runtime，用于 run lifecycle、artifact storage、provider registry、validation、repair pass、review tasks、approval audit、revisions 以及 JSON/Markdown/connector-draft export。"
+  - "设计了 agentic OCR workflow，包括 Fast Probe、provider routing、field extraction、validation、bounded self-correction、risk triage 和 human-in-the-loop approval。"
+  - "为 finance、healthcare 和 enterprise operations 创建了 sample fixtures 与 demo workflows，覆盖金额不匹配、低置信度字段、手写场景和需要审批的文档。"
+  - "目前正在与 5+ 家企业进行试验，用于改进真实文档 workflow，并推进 commercial pilots、funding 和生产部署准备。"
+links:
+  - label: "GitHub"
+    href: "https://github.com/kyoo-147/Dossier"
+    note: "由于版本、试验数据、企业合作方和隐私原因，最新源码及部分商业实现细节可能尚未完整公开。"
+highlights:
+  - title: "Quick OCR"
+    description: "在进入完整受控流程前，对 PDF 或单张图片进行轻量 OCR，快速检查抽取质量。"
+    src: "/work/dossier/quick-ocr.png"
+  - title: "Processing workspace"
+    description: "按文档跟踪 pipeline 状态、run events、artifacts、repair 需求和 review 步骤。"
+    src: "/work/dossier/processing.png"
+  - title: "Model registry"
+    description: "按文档类型管理 provider、model routing policy、成本、延迟以及 OCR/VLM/LLM 能力。"
+    src: "/work/dossier/models.png"
+  - title: "Document catalog"
+    description: "组织文档、OCR 结果、metadata、approval status 和 evidence，方便运营团队复核。"
+    src: "/work/dossier/documents.png"
+timeline:
+  - date: "01.2026"
+    label: "Product discovery 与 Document Intelligence 定位"
+  - date: "02.2026"
+    label: "基于 Tauri、Rust kernel 和 Python runtime 的 local-first architecture"
+  - date: "03.2026"
+    label: "Agentic OCR pipeline、provider routing 与 shared contracts"
+  - date: "04.2026"
+    label: "Validation、repair loop、review queue 与 approval/export flow"
+  - date: "05.2026"
+    label: "Finance、healthcare 与 enterprise fixtures"
+  - date: "至今"
+    label: "5+ business trials、commercial pilots 与 funding preparation"
+storyBlocks:
+  - title: "Beyond OCR"
+    body: "Dossier 的出发点是：OCR 只是文档 workflow 的一小部分。企业需要知道哪些字段可信、哪些字段需要 review、值来自文档的哪个位置，以及数据进入下游系统前由谁批准。"
+  - title: "Agentic but governed"
+    body: "Dossier 中的 agent 是 pipeline 中的逻辑角色：probe、route providers、extract fields、validate、retry 和 create review tasks。每一步都有边界、事件、artifact 和 stop policy，让自动化保持可检查。"
+  - title: "Risk as product surface"
+    body: "Dossier 不宣称做法证层面的真伪判断。产品重点是 risk triage：发现 mismatch、低置信度字段、缺失数据或异常值，并将相关 evidence 交给人工 review。"
+  - title: "From trials to commercialization"
+    body: "产品正在与 5+ 家企业试验，用于验证真实文档处理、减少人工操作、标准化 review，并为 commercial pilots、付费部署和 funding conversations 做准备。"
+gallery:
+  - label: "Inbox"
+    src: "/work/dossier/inbox.png"
+  - label: "Settings"
+    src: "/work/dossier/settings.png"
+  - label: "Dossier product workflow"
+    src: "/work/dossier/product-workflow.png"
+  - label: "Agentic OCR pipeline"
+    src: "/work/dossier/agentic-ocr-pipeline.png"
+  - label: "Local-first runtime architecture"
+    src: "/work/dossier/local-first-runtime-architecture.png"
+  - label: "Evidence-backed field extraction"
+    src: "/work/dossier/evidence-backed-field-extraction.png"
+  - label: "Validation, repair and human review loop"
+    src: "/work/dossier/validation-repair-human-review-loop.png"
+  - label: "Domain use case matrix"
+    src: "/work/dossier/domain-use-case-matrix.png"
+  - label: "Model/provider routing strategy"
+    src: "/work/dossier/model-provider-routing-strategy.png"
+---
+
+## Context
+
+Dossier 是一个 local-first Agentic Document Intelligence 平台，面向敏感文档 workflow，其中 OCR 输出必须经过 validation、evidence、review 和受控 export。

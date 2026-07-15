@@ -1,0 +1,74 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { SITE } from "@/config";
+import Card from "@/components/Card.astro";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import HeroArtwork from "@/components/HeroArtwork.astro";
+import Socials from "@/components/Socials.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import WorkListItem from "@/components/WorkListItem.astro";
+import type { Locale } from "@/i18n/config";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+
+export interface Props {
+  locale: Locale;
+  posts: CollectionEntry<"blog">[];
+  work: CollectionEntry<"work">[];
+}
+
+const { locale, posts, work } = Astro.props;
+const t = useTranslations(locale);
+const pageTitle = `${SITE.title} | ${t.siteDescription}`;
+---
+
+<Layout title={pageTitle} description={t.siteDescription} locale={locale}>
+  <Header locale={locale} />
+
+  <main class="site-shell pb-10">
+    <section class="grid gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1fr)] lg:items-stretch lg:gap-8">
+      <div class="pt-5 lg:pt-4">
+        <div class="eyebrow-line site-kicker">{t.hero.eyebrow}</div>
+        <h1
+          class="mt-5 whitespace-nowrap text-[2.7rem] leading-[0.94] font-semibold tracking-[-0.04em] text-foreground sm:text-[3.5rem] lg:text-[4rem]"
+          set:html={t.hero.titleHtml}
+        />
+        <div class="mt-6 max-w-[31rem] text-[1.02rem] leading-8 text-muted-foreground space-y-4">
+          {Array.isArray(t.hero.intro) ? t.hero.intro.map((p: string) => <p set:html={p}></p>) : <p set:html={t.hero.intro}></p>}
+        </div>
+        <div class="mt-8 flex flex-wrap items-center gap-6">
+          <a href={getLocalizedPath(locale, "/work")} class="surface-button surface-button-primary">
+            {t.hero.primaryCta} <span aria-hidden="true">&rarr;</span>
+          </a>
+          <div class="flex items-center text-[color:var(--accent)] hover:text-[#b35537] transition-colors">
+            <Socials />
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:pt-4 relative w-full">
+        <HeroArtwork />
+      </div>
+    </section>
+
+
+    <section class="site-hairline mt-7 grid gap-12 pt-8 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading title={t.sections.selectedWork} href={getLocalizedPath(locale, "/work")} label="Learn more" />
+        <ul>
+          {work.map(entry => <WorkListItem entry={entry} locale={locale} />)}
+        </ul>
+      </div>
+
+      <div>
+        <SectionHeading title={t.sections.recentWriting} href={getLocalizedPath(locale, "/posts")} label="Learn more" />
+        <ul>
+          {posts.map(entry => <Card entry={entry} locale={locale} />)}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <Footer locale={locale} />
+</Layout>

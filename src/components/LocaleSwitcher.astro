@@ -1,0 +1,46 @@
+---
+import { LOCALES, LOCALE_LABELS, type Locale } from "@/i18n/config";
+import { switchLocalePath } from "@/i18n/utils";
+
+export interface Props {
+  locale: Locale;
+  pathname: string;
+  variant?: "default" | "compact";
+}
+
+const { locale, pathname, variant = "default" } = Astro.props;
+---
+
+{
+  variant === "compact" ? (
+    <div class="flex items-center gap-3 text-[0.68rem] tracking-[0.18em] text-subtle-foreground">
+      {LOCALES.map((item, index) => (
+        <>
+          {index > 0 && <span aria-hidden="true" class="opacity-40">/</span>}
+          <a
+            href={switchLocalePath(pathname, item)}
+            class:list={["transition hover:text-accent", item === locale ? "text-accent" : ""]}
+          >
+            {LOCALE_LABELS[item]}
+          </a>
+        </>
+      ))}
+    </div>
+  ) : (
+    <div class="flex items-center gap-2 text-[0.74rem] tracking-[0.16em] text-subtle-foreground">
+      {
+        LOCALES.map(item => (
+          <a
+            href={switchLocalePath(pathname, item)}
+            class:list={[
+              "rounded-full border px-2.5 py-1 transition hover:border-border-strong hover:text-accent",
+              item === locale ? "border-border-strong text-foreground" : "border-transparent",
+            ]}
+          >
+            {LOCALE_LABELS[item]}
+          </a>
+        ))
+      }
+    </div>
+  )
+}

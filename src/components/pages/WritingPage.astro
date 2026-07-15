@@ -1,0 +1,218 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import SearchDropdown from "@/components/SearchDropdown.astro";
+import { BLOG_CATEGORY_ITEMS } from "@/data/blogCategories";
+import { SITE } from "@/config";
+import type { Locale } from "@/i18n/config";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { getPostSlug } from "@/utils/content";
+import Layout from "@/layouts/Layout.astro";
+import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import { calculateReadingTime } from "@/utils/readingTime";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  locale: Locale;
+  posts: CollectionEntry<"blog">[];
+}
+
+const { locale, posts } = Astro.props;
+const t = useTranslations(locale);
+const grouped = Object.entries(
+  getPostsByGroupCondition(posts, post => new Date(post.data.pubDatetime).getFullYear()),
+).sort(([a], [b]) => Number(b) - Number(a));
+---
+
+<Layout title={`${t.writing.title} | ${SITE.title}`} description={t.writing.desc} locale={locale}>
+  <Header locale={locale} />
+  <main class="site-shell pb-12">
+    <section class="content-width pt-8">
+      <h1 class="text-[3rem] leading-[0.98] font-semibold tracking-[-0.04em] text-foreground sm:text-[4rem]">
+        {t.writing.title}
+      </h1>
+      <p class="mt-5 max-w-[34rem] text-[1.08rem] leading-8 text-muted-foreground">{t.writing.desc}</p>
+
+      <div class="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <nav
+          aria-label="Post categories"
+          class="writing-category-nav min-w-0"
+        >
+          <div class="flex flex-wrap items-center gap-y-2 pr-2 text-[1.02rem] text-foreground">
+            <button
+              data-category="all"
+              class="category-btn shrink-0 cursor-pointer font-medium text-accent underline decoration-accent underline-offset-8"
+            >
+              {t.writing.allPosts}
+            </button>
+            {BLOG_CATEGORY_ITEMS.map((item) => (
+              <>
+                <span class="px-3 text-subtle-foreground/50">/</span>
+                <button
+                  data-category={item.query}
+                  class="category-btn shrink-0 cursor-pointer text-foreground transition-colors hover:text-accent"
+                >
+                  {t.categories[item.category as keyof typeof t.categories]}
+                </button>
+              </>
+            ))}
+          </div>
+        </nav>
+
+        <div class="w-full lg:w-[280px] shrink-0">
+          <SearchDropdown locale={locale} />
+        </div>
+      </div>
+    </section>
+
+    <section class="content-width mt-10" id="blog-post-list">
+      <div id="search-results-host" class="hidden"></div>
+      <p id="category-empty-state" class="hidden border-t border-border py-8 text-[1rem] leading-7 text-muted-foreground">
+        No posts in this category yet.
+      </p>
+      <div id="default-post-list" class="space-y-12">
+        {grouped.map(([year, entries]) => (
+          <section class="year-section">
+            <div class="border-b border-border pb-3 mb-2">
+              <h2 class="text-[2rem] font-semibold leading-none tracking-[-0.04em] text-foreground">
+                {year}
+                <span class="ml-1.5 text-[1.05rem] font-medium text-subtle-foreground year-count relative -top-3">{entries.length}</span>
+              </h2>
+            </div>
+
+            <ul class="flex flex-col">
+                {entries.map((entry) => (
+                  <li
+                    class="post-item border-b border-border py-6 last:border-b-0"
+                    data-categories={entry.data.categories.join(",")}
+                  >
+                    <a href={getLocalizedPath(locale, `/posts/${getPostSlug(entry.id)}`)} class="block">
+                      <h2 class="text-[1.28rem] font-semibold tracking-[-0.02em] text-foreground hover:text-accent">
+                        {entry.data.title}
+                      </h2>
+                      <p class="mt-2 text-sm text-subtle-foreground">
+                        {entry.data.pubDatetime.toLocaleDateString(locale === "zh-cn" ? "zh-CN" : locale, {
+                          month: "short",
+                          day: "numeric",
+                        })} · {calculateReadingTime(entry.body)}
+                      </p>
+                      <p class="mt-2 max-w-[60ch] text-[1rem] leading-7 text-muted-foreground">{entry.data.description}</p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Layout>
+
+<script is:inline>
+  function setupCategoryFilters() {
+    const nav = document.querySelector(".writing-category-nav");
+    if (!nav || nav.getAttribute("data-initialized") === "true") return;
+    nav.setAttribute("data-initialized", "true");
+
+    const buttons = Array.from(document.querySelectorAll(".category-btn"));
+    const posts = Array.from(document.querySelectorAll(".post-item"));
+    const emptyState = document.getElementById("category-empty-state");
+
+    function setActiveButton(selectedCategory) {
+      buttons.forEach(button => {
+        button.className =
+          "category-btn shrink-0 cursor-pointer text-foreground transition-colors hover:text-accent";
+      });
+
+      const activeButton =
+        buttons.find(button => button.getAttribute("data-category") === selectedCategory) ||
+        buttons.find(button => button.getAttribute("data-category") === "all");
+
+      if (activeButton) {
+        activeButton.className =
+          "category-btn shrink-0 cursor-pointer font-medium text-accent underline decoration-accent underline-offset-8";
+      }
+    }
+
+    function filterPosts(selectedCategory, updateUrl = false) {
+      let visibleCount = 0;
+
+      posts.forEach(post => {
+        if (selectedCategory === "all") {
+          post.style.display = "";
+          visibleCount += 1;
+          return;
+        }
+
+        const categories =
+          post
+            .getAttribute("data-categories")
+            ?.split(",")
+            .map(value => value.trim().toLowerCase()) || [];
+
+        if (categories.includes(selectedCategory)) {
+          post.style.display = "";
+          visibleCount += 1;
+        } else {
+          post.style.display = "none";
+        }
+      });
+
+      const yearSections = Array.from(document.querySelectorAll(".year-section"));
+      yearSections.forEach(section => {
+        const sectionPosts = Array.from(section.querySelectorAll(".post-item"));
+        const visiblePosts = sectionPosts.filter(p => p.style.display !== "none");
+        
+        if (visiblePosts.length > 0) {
+          section.style.display = "";
+          const countEl = section.querySelector(".year-count");
+          if (countEl) {
+            countEl.textContent = visiblePosts.length;
+          }
+        } else {
+          section.style.display = "none";
+        }
+      });
+
+      if (emptyState) {
+        emptyState.classList.toggle("hidden", visibleCount !== 0);
+      }
+
+      setActiveButton(selectedCategory);
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        if (selectedCategory === "all") {
+          url.searchParams.delete("category");
+        } else {
+          url.searchParams.set("category", selectedCategory);
+        }
+        url.searchParams.delete("tag");
+        window.history.replaceState({}, "", url);
+      }
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        const selectedCategory = button.getAttribute("data-category") || "all";
+        filterPosts(selectedCategory, true);
+      });
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const initialCategory = params.get("category") || params.get("tag") || "all";
+    filterPosts(initialCategory, false);
+  }
+
+  setupCategoryFilters();
+  document.addEventListener("astro:page-load", setupCategoryFilters);
+</script>
+
+<style>
+  .writing-category-nav::-webkit-scrollbar {
+    display: none;
+  }
+</style>

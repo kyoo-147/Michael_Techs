@@ -1,0 +1,56 @@
+---
+import { SITE } from "@/config";
+import { DEFAULT_LOCALE, type Locale } from "@/i18n/config";
+import { getHtmlLang } from "@/i18n/utils";
+import "@/styles/global.css";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  canonicalURL?: string | URL;
+  locale?: Locale;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  ogImage = `/${SITE.ogImage}`,
+  canonicalURL = Astro.url,
+  locale = DEFAULT_LOCALE,
+} = Astro.props;
+
+const canonical =
+  canonicalURL instanceof URL ? canonicalURL.toString() : canonicalURL;
+const socialImageURL = new URL(ogImage, Astro.url).toString();
+---
+
+<!doctype html>
+<html lang={getHtmlLang(locale)}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f3eedf" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=mc" />
+    <link rel="icon" type="image/png" href="/favicon-512.png?v=mc" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImageURL} />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={socialImageURL} />
+  </head>
+  <body>
+    <div class="page-frame">
+      <slot />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+---
+locale: en
+title: "YI-OneClick"
+summary: "An AI workflow platform for operating leads, customers, inboxes, automation, and AI agents in one controlled system."
+description: "YI-OneClick is an AI-assisted workflow and customer operations platform focused on turning repetitive business processes into controlled, observable, cost-aware automation flows."
+overview: "YI-OneClick is designed as an operating layer for small and medium-sized businesses: customer operations, dashboarding, workflow libraries, a unified inbox, and an AI Center. Instead of being only a data-entry product, it brings AI into real workflows: task classification, next-step suggestions, response assistance, workflow orchestration, and model cost tracking."
+problem: "Small teams often manage customers, messages, workflows, and internal data across fragmented tools. Once AI enters the workflow, the harder problems are not just model calls, but data permissions, approval flows, cost, latency, run history, and operational control."
+approach: "The system is built around Next.js, Node.js, PostgreSQL, and Redis, with an event-driven and state-oriented workflow approach. The AI Gateway handles model routing, fallback, cost tracking, and quality/latency observability. Workflows are packaged as templates that are easier to use than technical automation tools while preserving logs, permissions, approvals, and integration scalability."
+role: "Founder · Product Builder · Full Stack Developer"
+period: "2025"
+featured: true
+order: 2
+heroImage: "/work/oneclick/workflow-ai-builder.png"
+showBody: false
+metrics:
+  - value: "AI CRM"
+    label: "operations dashboard, inbox, and AI Center"
+  - value: "Workflow Builder"
+    label: "events, retries, approvals, and run history"
+  - value: "AI Gateway"
+    label: "routing, fallback, cost, and latency control"
+outcomes:
+  - "Built the product foundation across an operations dashboard, workflow builder, workflow library, inbox, and AI Center."
+  - "Designed an AI Gateway direction for model routing, cost control, fallback, and latency/quality tracking by task type."
+  - "Shaped the workflow engine around events and state so automation can support run history, retry, approval gates, and audit logs."
+  - "Focused on practical SMB operations: reducing repetitive work, centralizing operational data, and making AI workflows easier to deploy."
+links:
+  - label: "GitHub"
+    href: "#"
+    note: "The latest source cannot be fully public yet due to versioning, commercial, and privacy constraints."
+highlights:
+  - src: "/work/oneclick/dashboard.png"
+    title: "Operations dashboard"
+    description: "Tracks pipeline state, workflow performance, and the key operating metrics in one view."
+  - src: "/work/oneclick/workflow-library.png"
+    title: "Workflow library"
+    description: "Prebuilt workflow templates help teams deploy automation faster without starting from a blank canvas."
+  - src: "/work/oneclick/inbox.png"
+    title: "Unified inbox"
+    description: "Centralizes customer conversations and tasks so AI can help classify, respond, and route work."
+  - src: "/work/oneclick/ai-center.png"
+    title: "AI Center"
+    description: "A control center for AI agents, model routing, smart tasks, and cost governance."
+timeline:
+  - date: "2025"
+    label: "Product foundation"
+  - date: "2025"
+    label: "Workflow builder"
+  - date: "2025"
+    label: "AI Gateway"
+  - date: "2025"
+    label: "Inbox and automation"
+  - date: "2026"
+    label: "Operational pilots"
+storyBlocks:
+  - title: "AI belongs inside the workflow"
+    body: "YI-OneClick does not treat AI as a chatbot beside the product. AI is placed inside operating steps: reading context, classifying work, suggesting actions, running workflows, and leaving sensitive steps for human approval."
+  - title: "Workflow has to be easier"
+    body: "Powerful automation tools often require technical thinking. OneClick leans toward templates and a friendlier builder while preserving run history, retries, permissions, and audits."
+  - title: "Cost is part of the architecture"
+    body: "The strongest model is not always the best choice. The system needs routing, fallback, cost tracking, and quality observability to optimize per task type."
+  - title: "From data to operations"
+    body: "Dashboard, inbox, workflow, and AI Center are connected so businesses do more than store data: they turn it into observable action."
+gallery:
+  - src: "/work/oneclick/workflow-ai-builder.png"
+    label: "Workflow AI builder"
+  - src: "/work/oneclick/dashboard.png"
+    label: "Dashboard"
+  - src: "/work/oneclick/workflow-library.png"
+    label: "Workflow library"
+  - src: "/work/oneclick/inbox.png"
+    label: "Inbox"
+  - src: "/work/oneclick/ai-center.png"
+    label: "AI Center"
+  - src: "/work/oneclick/system-architecture.png"
+    label: "System architecture"
+  - src: "/work/oneclick/data-model.png"
+    label: "Data model"
+  - src: "/work/oneclick/event-workflow-engine.png"
+    label: "Event-driven workflow engine"
+  - src: "/work/oneclick/ai-gateway-model-routing.png"
+    label: "AI Gateway and model routing"
+  - src: "/work/oneclick/multi-tenant-permission-model.png"
+    label: "Multi-tenant permission model"
+  - src: "/work/oneclick/cost-observability-layer.png"
+    label: "Cost and observability layer"
+  - src: "/work/oneclick/ai-business-workflows.png"
+    label: "AI applied to business workflows"
+---
+
+## Context
+
+YI-OneClick is an AI-assisted workflow and customer operations platform focused on turning repetitive business processes into controlled, observable, cost-aware automation flows.

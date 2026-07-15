@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE } from "@/i18n/config";
+import { getLocalizedPath } from "@/i18n/utils";
+import { getWorkSlug } from "@/utils/content";
+
+export interface Props {
+  entry: CollectionEntry<"work">;
+  locale?: Locale;
+}
+
+const { entry, locale = DEFAULT_LOCALE } = Astro.props;
+const slug = getWorkSlug(entry.id);
+const fallbackImages: Record<string, string> = {
+  "oneclick-crm": "/assets/work-thumb-oneclick.png",
+  "snow-ai-companion": "/assets/work-thumb-snow.png",
+  "computer-vision-qc-system": "/assets/work-thumb-cv.png",
+  "autonomous-vehicle-research": "/assets/work-thumb-av.png",
+};
+const thumb = entry.data.heroImage ?? fallbackImages[slug];
+---
+
+<li class="border-t border-border py-5 first:border-t-0">
+  <a
+    href={getLocalizedPath(locale, `/work/${getWorkSlug(entry.id)}`)}
+    class="grid grid-cols-[106px_1fr] items-start gap-4 md:grid-cols-[118px_1fr_24px] md:items-center"
+  >
+    <div class="flex h-[64px] items-center justify-center overflow-hidden border border-border bg-surface md:h-[70px]">
+      {
+        thumb ? (
+          <img src={thumb} alt="" class="h-full w-full object-cover" loading="lazy" />
+        ) : (
+          <span class="text-[0.74rem] uppercase tracking-[0.16em] text-subtle-foreground">
+            {entry.data.heroLabel ?? "Case Study"}
+          </span>
+        )
+      }
+    </div>
+    <div>
+      <h3 class="text-[1.16rem] font-semibold tracking-[-0.01em] text-foreground transition hover:text-accent">
+        {entry.data.title}
+      </h3>
+      <p class="mt-1 text-sm leading-7 text-muted-foreground">{entry.data.summary}</p>
+    </div>
+    <div class="hidden text-right text-lg text-subtle-foreground md:block">&rarr;</div>
+  </a>
+</li>

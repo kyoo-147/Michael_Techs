@@ -1,0 +1,274 @@
+---
+import { CONTACT } from "@/config";
+import type { Locale } from "@/i18n/config";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const copy = {
+  en: {
+    eyebrow: "CONTACT",
+    title: "Build useful AI systems with me.",
+    intro:
+      "For product collaboration, AI engineering, technical consulting, research work, or startup conversations, reach me through the channels below.",
+    direct: "Direct",
+    profiles: "Profiles",
+    company: "NaVinAIF TECH",
+    companyBody:
+      "A small research and product direction around friendly artificial intelligence, practical automation, and tools that help people keep moving toward their own goals.",
+    fit: "Good fit",
+    fitItems: [
+      "AI product and workflow design",
+      "Computer vision, OCR, edge AI and automation",
+      "Startup, research, education and technical collaboration",
+    ],
+    response: "Response window",
+    responseBody:
+      "Email is the best path for serious work. LinkedIn is fine for professional introductions, while GitHub is best for source and project references.",
+    email: "Email",
+    phone: "Phone",
+    phoneMeta: "Call / message",
+    github: "GitHub",
+    linkedin: "LinkedIn",
+    x: "X",
+    location: "Vietnam",
+    copyEmail: "Open email",
+  },
+  vi: {
+    eyebrow: "LIÊN HỆ",
+    title: "Cùng xây dựng những hệ thống AI có ích.",
+    intro:
+      "Nếu bạn muốn trao đổi về sản phẩm, kỹ thuật AI, tư vấn hệ thống, nghiên cứu hoặc hợp tác startup, có thể liên hệ qua các kênh bên dưới.",
+    direct: "Liên hệ trực tiếp",
+    profiles: "Hồ sơ",
+    company: "NaVinAIF TECH",
+    companyBody:
+      "Một hướng nghiên cứu và xây dựng sản phẩm nhỏ xoay quanh friendly artificial intelligence, automation thực tế và các công cụ giúp con người tiếp tục theo đuổi mục tiêu của mình.",
+    fit: "Phù hợp để trao đổi",
+    fitItems: [
+      "Thiết kế sản phẩm AI và workflow vận hành",
+      "Computer vision, OCR, edge AI và automation",
+      "Startup, nghiên cứu, giáo dục và hợp tác kỹ thuật",
+    ],
+    response: "Cách liên hệ tốt nhất",
+    responseBody:
+      "Email là kênh phù hợp nhất cho công việc nghiêm túc. LinkedIn phù hợp để kết nối chuyên nghiệp, còn GitHub dùng để xem mã nguồn và dự án tham khảo.",
+    email: "Email",
+    phone: "Điện thoại",
+    phoneMeta: "Gọi / nhắn tin",
+    github: "GitHub",
+    linkedin: "LinkedIn",
+    x: "X",
+    location: "Việt Nam",
+    copyEmail: "Mở email",
+  },
+  "zh-cn": {
+    eyebrow: "联系",
+    title: "一起构建真正有用的 AI 系统。",
+    intro:
+      "如果你想交流产品合作、AI 工程、系统咨询、研究项目或 startup 方向，可以通过下面的渠道联系我。",
+    direct: "直接联系",
+    profiles: "个人资料",
+    company: "NaVinAIF TECH",
+    companyBody:
+      "一个围绕 friendly artificial intelligence、实用自动化和帮助人们继续追求目标的工具方向。",
+    fit: "适合交流",
+    fitItems: [
+      "AI 产品与 workflow 设计",
+      "Computer vision、OCR、edge AI 与 automation",
+      "Startup、研究、教育与技术合作",
+    ],
+    response: "推荐联系路径",
+    responseBody:
+      "严肃合作建议使用 Email。LinkedIn 适合职业连接，GitHub 适合查看源码和项目参考。",
+    email: "Email",
+    phone: "电话",
+    phoneMeta: "电话 / 短信",
+    github: "GitHub",
+    linkedin: "LinkedIn",
+    x: "X",
+    location: "越南",
+    copyEmail: "打开邮箱",
+  },
+}[locale];
+
+const links = [
+  {
+    label: copy.email,
+    value: CONTACT.email,
+    href: `mailto:${CONTACT.email}`,
+    meta: copy.copyEmail,
+  },
+  {
+    label: copy.phone,
+    value: "+84 365 646 109",
+    href: "tel:+84365646109",
+    meta: copy.phoneMeta,
+  },
+  {
+    label: copy.github,
+    value: "github.com/kyoo-147",
+    href: CONTACT.github,
+    meta: "Source / projects",
+  },
+  {
+    label: copy.linkedin,
+    value: "minh-cuong-bui",
+    href: CONTACT.linkedin,
+    meta: "Professional profile",
+  },
+  {
+    label: copy.x,
+    value: "x.com/mih_cuog",
+    href: "https://x.com/mih_cuog",
+    meta: "Updates",
+  },
+];
+---
+
+<section class="pt-8">
+  <div class="eyebrow-line site-kicker">{copy.eyebrow}</div>
+  <div class="mt-6 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(300px,0.7fr)] lg:items-end">
+    <div>
+      <h1 class="max-w-[780px] text-[3.15rem] font-semibold leading-[0.98] tracking-[-0.045em] text-foreground sm:text-[4.6rem]">
+        {copy.title}
+      </h1>
+      <p class="mt-6 max-w-[42rem] text-[1.08rem] leading-8 text-muted-foreground">
+        {copy.intro}
+      </p>
+    </div>
+    <button
+      type="button"
+      class="group block border border-border bg-[#050505] p-3 text-left transition hover:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      data-contact-image-trigger
+      aria-label="Open NaVinAIF TECH image"
+    >
+      <img
+        src="/contact/navinaif-tech.jpg"
+        alt="NaVinAIF TECH company message"
+        class="aspect-[16/9] h-full w-full object-contain transition duration-300 group-hover:scale-[1.01]"
+        loading="eager"
+      />
+    </button>
+  </div>
+</section>
+
+<section class="mt-12 grid border border-border md:grid-cols-2">
+  <div class="border-b border-border p-6 md:border-r md:border-b-0 lg:p-8">
+    <h2 class="text-[1.22rem] font-semibold tracking-[-0.02em] text-foreground">{copy.direct}</h2>
+    <div class="mt-5 border-b border-border pb-5">
+      <div class="text-sm text-subtle-foreground">{copy.location}</div>
+      <div class="mt-2 text-[1.25rem] font-semibold tracking-[-0.02em] text-foreground">
+        Michael / Bui Minh Cuong
+      </div>
+    </div>
+    <div class="mt-6 divide-y divide-border">
+      {
+        links.slice(0, 2).map(link => (
+          <a href={link.href} class="group block py-5 first:pt-0 last:pb-0">
+            <div class="flex items-center justify-between gap-6">
+              <div>
+                <div class="text-sm text-subtle-foreground">{link.label}</div>
+                <div class="mt-1 break-all text-[1.08rem] font-semibold text-foreground">{link.value}</div>
+              </div>
+              <div class="text-lg text-subtle-foreground transition group-hover:text-accent">→</div>
+            </div>
+            <div class="mt-2 text-sm text-muted-foreground">{link.meta}</div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="p-6 lg:p-8">
+    <h2 class="text-[1.22rem] font-semibold tracking-[-0.02em] text-foreground">{copy.profiles}</h2>
+    <div class="mt-6 divide-y divide-border">
+      {
+        links.slice(2).map(link => (
+          <a href={link.href} target="_blank" rel="noreferrer" class="group block py-5 first:pt-0 last:pb-0">
+            <div class="flex items-center justify-between gap-6">
+              <div>
+                <div class="text-sm text-subtle-foreground">{link.label}</div>
+                <div class="mt-1 break-all text-[1.08rem] font-semibold text-foreground">{link.value}</div>
+              </div>
+              <div class="text-lg text-subtle-foreground transition group-hover:text-accent">→</div>
+            </div>
+            <div class="mt-2 text-sm text-muted-foreground">{link.meta}</div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<div
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+  data-contact-image-viewer
+  aria-hidden="true"
+>
+  <button
+    type="button"
+    class="absolute inset-0 cursor-zoom-out"
+    data-contact-image-close
+    aria-label="Close image"
+  ></button>
+  <div class="relative z-10 w-full max-w-6xl border border-white/20 bg-black p-3 shadow-2xl">
+    <button
+      type="button"
+      class="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center border border-white/25 bg-black/70 text-xl leading-none text-white transition hover:border-white"
+      data-contact-image-close
+      aria-label="Close image"
+    >
+      ×
+    </button>
+    <img
+      src="/contact/navinaif-tech.jpg"
+      alt="NaVinAIF TECH company message"
+      class="max-h-[86vh] w-full object-contain"
+      loading="lazy"
+    />
+  </div>
+</div>
+
+<script>
+  const contactImageTrigger = document.querySelector<HTMLButtonElement>("[data-contact-image-trigger]");
+  const contactImageViewer = document.querySelector<HTMLElement>("[data-contact-image-viewer]");
+  const contactImageCloseButtons = document.querySelectorAll<HTMLButtonElement>("[data-contact-image-close]");
+
+  const openContactImageViewer = () => {
+    if (!contactImageViewer) return;
+    contactImageViewer.classList.remove("hidden");
+    contactImageViewer.classList.add("flex");
+    contactImageViewer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeContactImageViewer = () => {
+    if (!contactImageViewer) return;
+    contactImageViewer.classList.add("hidden");
+    contactImageViewer.classList.remove("flex");
+    contactImageViewer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  contactImageTrigger?.addEventListener("click", openContactImageViewer);
+  contactImageCloseButtons.forEach(button => {
+    button.addEventListener("click", closeContactImageViewer);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && contactImageViewer?.getAttribute("aria-hidden") === "false") {
+      closeContactImageViewer();
+    }
+  });
+</script>
+
+<section class="mt-12 border-t border-b border-border py-8">
+  <div class="grid gap-5 md:grid-cols-[180px_1fr]">
+    <h2 class="text-[1.12rem] font-semibold text-foreground">{copy.response}</h2>
+    <p class="max-w-[58rem] text-[1.02rem] leading-8 text-muted-foreground">{copy.responseBody}</p>
+  </div>
+</section>

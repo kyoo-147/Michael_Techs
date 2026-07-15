@@ -1,0 +1,147 @@
+---
+import { CONTACT } from "@/config";
+import { getLocalizedPath } from "@/i18n/utils";
+import { aboutData } from "@/data/about";
+import { getWorkSlug } from "@/utils/content";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  locale: "en" | "vi" | "zh-cn";
+  posts: CollectionEntry<"blog">[];
+  work: CollectionEntry<"work">[];
+}
+
+const { locale, posts, work } = Astro.props;
+const data = aboutData[locale];
+---
+
+<div class="site-shell pt-8 pb-16 space-y-20 lg:space-y-28">
+  <section>
+    <div class="grid grid-cols-1 items-start gap-10 md:grid-cols-[1fr_1.2fr] md:gap-16">
+      <div class="w-full overflow-hidden rounded-2xl border border-border">
+        <img
+          src="/me_3.jpg"
+          alt="Michael"
+          class="h-auto w-full aspect-[4/5] object-cover object-center md:h-full md:aspect-auto"
+          style="max-height: 600px;"
+        />
+      </div>
+      <div class="space-y-6 text-[1.05rem] leading-8 text-muted-foreground">
+        <p class="text-[1.2rem] font-medium leading-snug text-foreground">
+          {data.hero.description}
+        </p>
+        <div class="space-y-4 pt-2">
+          {data.story.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+        <div class="flex flex-wrap gap-4 pt-6">
+          <a href={getLocalizedPath(locale, "/work")} class="surface-button surface-button-primary">
+            {data.hero.buttons.projects}
+          </a>
+          <a href="/Founder_BuiMinhCuong.pdf" target="_blank" class="surface-button surface-button-secondary">
+            {data.hero.buttons.resume}
+          </a>
+          <a href={`mailto:${CONTACT.email}`} class="surface-button surface-button-secondary">
+            {data.hero.buttons.contact}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mb-6 border-b border-border border-dashed pb-4">
+      <h2 class="text-[2rem] font-semibold tracking-[-0.03em] text-foreground">{data.skills.title}</h2>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {data.skills.categories.map((category) => (
+        <div class="rounded-[10px] border border-border bg-surface/70 p-4 md:p-5">
+          <div class="mb-3 text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-subtle-foreground">
+            {category.name}
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {category.items.map((skill) => (
+              <span class="inline-flex items-center gap-1.5 rounded-[6px] border border-border bg-background px-2.5 py-1.5 text-[0.82rem] font-medium text-foreground">
+                {skill.icon && (
+                  <img
+                    src={`https://cdn.simpleicons.org/${skill.icon}/737373`}
+                    alt={skill.name}
+                    class="h-[0.92rem] w-[0.92rem] opacity-90 grayscale"
+                    loading="lazy"
+                  />
+                )}
+                {skill.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <div class="mb-6 border-b border-border border-dashed pb-4">
+      <h2 class="text-[2rem] font-semibold tracking-[-0.03em] text-foreground">{data.strengths.title}</h2>
+    </div>
+    {data.strengths.description && (
+      <p class="mb-6 max-w-[48rem] text-[1.05rem] leading-8 text-muted-foreground">
+        {data.strengths.description}
+      </p>
+    )}
+    <div class="grid gap-x-8 gap-y-3 md:grid-cols-2">
+      {data.strengths.items.map((item) => (
+        <div class="flex items-start gap-3 border-b border-border/70 py-2.5 text-[1.02rem] text-foreground">
+          <span class="mt-[0.68rem] h-[5px] w-[5px] flex-shrink-0 rounded-full bg-accent"></span>
+          <span class="font-medium leading-7">{item}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+
+
+  <section>
+    <h2 class="mb-6 text-[2rem] font-semibold tracking-[-0.03em] text-foreground">{data.experience.title}</h2>
+    <p class="max-w-[42rem] text-[1.02rem] leading-8 text-muted-foreground">
+      {data.experience.description}
+    </p>
+    <a href={getLocalizedPath(locale, "/work")} class="mt-4 inline-block font-medium text-foreground hover:text-accent hover:underline underline-offset-4 transition-colors">
+      {data.experience.linkText} &rarr;
+    </a>
+  </section>
+
+  <section>
+    <h2 class="mb-6 text-[2rem] font-semibold tracking-[-0.03em] text-foreground">{data.highlights.title}</h2>
+    <ul class="max-w-[42rem] list-inside list-disc space-y-2 text-[1.02rem] leading-8 text-muted-foreground">
+      {data.highlights.items.map((highlight) => <li>{highlight}</li>)}
+    </ul>
+  </section>
+
+  <section>
+    <h2 class="mb-6 text-[2rem] font-semibold tracking-[-0.03em] text-foreground">{data.focus.title}</h2>
+    <div class="space-y-4 max-w-[42rem] text-[1.02rem] leading-8 text-muted-foreground">
+      {data.focus.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </section>
+
+
+
+  <section class="mx-auto max-w-[48rem] rounded-2xl border border-border bg-[url('/hometown_bg.png')] bg-black/40 bg-blend-overlay bg-cover bg-center bg-no-repeat p-8 text-center md:p-12">
+    <h2 class="mb-4 text-[2rem] font-semibold tracking-[-0.03em] text-white">{data.contact.title}</h2>
+    <p class="mx-auto mb-8 max-w-[32rem] text-[1.02rem] leading-8 text-white/90">
+      {data.contact.description}
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-8">
+      <a href={`mailto:${CONTACT.email}`} class="surface-button surface-button-primary px-8 shadow-lg">
+        {data.contact.cta}
+      </a>
+      <div class="flex gap-6 text-[1.05rem] font-medium text-white/90">
+        <a href={CONTACT.github} target="_blank" class="hover:text-white hover:underline underline-offset-4 transition-all">
+          GitHub
+        </a>
+        <a href={CONTACT.linkedin} target="_blank" class="hover:text-white hover:underline underline-offset-4 transition-all">
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

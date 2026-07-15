@@ -1,0 +1,14 @@
+---
+import ArchivePage from "@/components/pages/ArchivePage.astro";
+import { NON_DEFAULT_LOCALES } from "@/i18n/config";
+import { getLocalizedPosts } from "@/utils/content";
+
+export async function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map(locale => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as "vi" | "zh-cn";
+const posts = await getLocalizedPosts(locale);
+---
+
+<ArchivePage locale={locale} posts={posts} />

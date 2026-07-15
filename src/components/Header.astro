@@ -1,0 +1,104 @@
+---
+import { SITE } from "@/config";
+import type { Locale } from "@/i18n/config";
+import { getLocalizedPath, stripLocaleFromPathname, useTranslations } from "@/i18n/utils";
+import LocaleSwitcher from "./LocaleSwitcher.astro";
+
+export interface Props {
+  locale: Locale;
+  switcherPathname?: string;
+}
+
+const { locale, switcherPathname } = Astro.props;
+const t = useTranslations(locale);
+const pathname = switcherPathname ?? Astro.url.pathname;
+const currentPath = stripLocaleFromPathname(pathname);
+
+const navLinks = [
+  { href: "/about", label: t.nav.about },
+  { href: "/work", label: t.nav.work },
+  { href: "/posts", label: t.nav.writing },
+  { href: "/Founder_BuiMinhCuong.pdf", label: t.nav.resume, external: true },
+  { href: "/contact", label: t.nav.contact },
+];
+
+const isActive = (href: string) => {
+  const normalizedHref = href.split("#")[0];
+  if (normalizedHref === "/") return currentPath === "/";
+  return currentPath === normalizedHref || currentPath.startsWith(`${normalizedHref}/`);
+};
+---
+
+<header class="site-shell pt-6 pb-6">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <!-- Left: Site Title -->
+    <div class="flex-1">
+      <a
+        href={getLocalizedPath(locale, "/")}
+        class="text-[1.2rem] font-semibold tracking-[0.25em] text-foreground hover:text-accent transition-colors"
+      >
+        {SITE.title.toUpperCase()}
+      </a>
+    </div>
+
+    <!-- Center: Navigation Tabs -->
+    <div class="hidden sm:flex flex-1 justify-center items-center">
+      <nav aria-label="Primary" class="flex flex-nowrap items-center justify-center gap-x-5 lg:gap-x-6 gap-y-3 text-[0.95rem] text-foreground font-semibold whitespace-nowrap">
+        {
+          navLinks.map(link => (
+            <div class="flex items-center gap-2">
+              <a
+                href={link.external ? link.href : getLocalizedPath(locale, link.href)}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+                class:list={[
+                  "border-b border-transparent pb-1 transition hover:border-border-strong hover:text-accent",
+                  { "border-border-strong": !link.external && isActive(link.href) },
+                ]}
+              >
+                {link.label}
+              </a>
+              {link.href.includes("contact") && (
+                <div class="w-[6px] h-[6px] rounded-full border-[1.5px] border-accent ml-1"></div>
+              )}
+            </div>
+          ))
+        }
+      </nav>
+    </div>
+
+    <!-- Right: Locale Switcher -->
+    <div class="flex flex-1 justify-end items-center gap-5">
+      <LocaleSwitcher locale={locale} pathname={pathname} variant="compact" />
+    </div>
+  </div>
+
+  <!-- Horizontal Line at the bottom -->
+  <div class="site-hairline mt-6"></div>
+
+  <!-- Mobile Navigation (visible only on small screens) -->
+  <div class="sm:hidden mt-6">
+    <nav aria-label="Primary Mobile" class="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[0.9rem] text-foreground font-semibold">
+      {
+        navLinks.map(link => (
+          <div class="flex items-center gap-2">
+            <a
+              href={link.external ? link.href : getLocalizedPath(locale, link.href)}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noreferrer" : undefined}
+              class:list={[
+                "border-b border-transparent pb-1 transition hover:border-border-strong hover:text-accent",
+                { "border-border-strong": !link.external && isActive(link.href) },
+              ]}
+            >
+              {link.label}
+            </a>
+            {link.href.includes("contact") && (
+              <div class="w-[5px] h-[5px] rounded-full border-[1.5px] border-accent ml-1"></div>
+            )}
+          </div>
+        ))
+      }
+    </nav>
+  </div>
+</header>

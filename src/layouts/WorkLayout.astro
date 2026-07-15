@@ -1,0 +1,904 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { SITE } from "@/config";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import type { Locale } from "@/i18n/config";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { getLocalizedWork, getWorkSlug } from "@/utils/content";
+import Layout from "./Layout.astro";
+
+type Props = {
+  locale: Locale;
+  entry: CollectionEntry<"work">;
+};
+
+const { locale, entry } = Astro.props;
+const t = useTranslations(locale);
+const slug = getWorkSlug(entry.id);
+const canonicalURL = new URL(getLocalizedPath(locale, `/work/${slug}`), Astro.site);
+const allWork = await getLocalizedWork(locale);
+const currentWorkIndex = allWork.findIndex(workEntry => workEntry.id === entry.id);
+const previousWork = currentWorkIndex > 0 ? allWork[currentWorkIndex - 1] : null;
+const nextWork = currentWorkIndex >= 0 && currentWorkIndex < allWork.length - 1 ? allWork[currentWorkIndex + 1] : null;
+const metrics = entry.data.metrics ?? [];
+const detailOutcomes = metrics.length > 0 ? entry.data.outcomes.slice(3) : entry.data.outcomes;
+const overview = entry.data.overview ?? entry.data.description;
+const problem = entry.data.problem ?? entry.data.description;
+const approach = entry.data.approach ?? entry.data.summary;
+const heroImage = entry.data.heroImage;
+const showBody = entry.data.showBody ?? false;
+const deploymentMatrix = entry.data.deploymentMatrix;
+
+const labels = {
+  en: {
+    highlights: "Project Highlights",
+    video: "Video & Walkthrough",
+    timeline: "Development Timeline",
+    story: "Behind The Project",
+    gallery: "Gallery",
+    emptyMedia: "Media placeholder",
+    watch: "Open project",
+    ctaTitle: "Interested in this project?",
+    ctaBody: "Let's build practical edge and AI systems for your workflow.",
+    ctaButton: "Contact",
+  },
+  vi: {
+    highlights: "Nổi bật dự án",
+    video: "Video & Walkthrough",
+    timeline: "Lộ trình phát triển",
+    story: "Câu chuyện đằng sau",
+    gallery: "Gallery",
+    emptyMedia: "Khung media trống",
+    watch: "Mở dự án",
+    ctaTitle: "Quan tâm đến dự án này?",
+    ctaBody: "Cùng nhau xây dựng giải pháp AI và edge bền vững cho workflow của bạn.",
+    ctaButton: "Liên hệ hợp tác",
+  },
+  "zh-cn": {
+    highlights: "项目亮点",
+    video: "视频与演示",
+    timeline: "开发时间线",
+    story: "项目背后",
+    gallery: "Gallery",
+    emptyMedia: "媒体占位",
+    watch: "打开项目",
+    ctaTitle: "对这个项目感兴趣？",
+    ctaBody: "一起构建适合真实 workflow 的 AI 与 edge 系统。",
+    ctaButton: "联系合作",
+  },
+}[locale];
+
+const fallbackHighlights = [
+  {
+    title: entry.data.title,
+    description: entry.data.summary,
+    label: "01",
+  },
+  {
+    title: t.work.problem,
+    description: problem,
+    label: "02",
+  },
+  {
+    title: t.work.approach,
+    description: approach,
+    label: "03",
+  },
+  {
+    title: t.work.outcomes,
+    description: entry.data.outcomes[0] ?? entry.data.description,
+    label: "04",
+  },
+];
+const highlights = entry.data.highlights.length > 0 ? entry.data.highlights : fallbackHighlights;
+
+const fallbackTimeline = [
+  { label: "01. Discovery", date: entry.data.period },
+  { label: "02. Architecture", date: entry.data.period },
+  { label: "03. Prototype", date: entry.data.period },
+  { label: "04. Validation", date: entry.data.period },
+  { label: "05. Archive / Iterate", date: entry.data.period },
+];
+const timeline = entry.data.timeline.length > 0 ? entry.data.timeline : fallbackTimeline;
+
+const fallbackStoryBlocks = [
+  {
+    title: t.work.overview,
+    body: overview,
+  },
+  {
+    title: t.work.problem,
+    body: problem,
+  },
+  {
+    title: t.work.approach,
+    body: approach,
+  },
+];
+const storyBlocks = entry.data.storyBlocks.length > 0 ? entry.data.storyBlocks : fallbackStoryBlocks;
+const gallery = entry.data.gallery.length > 0 ? entry.data.gallery : Array.from({ length: 7 }, (_, index) => ({
+  label: `${entry.data.title} ${index + 1}`,
+}));
+const isVideoSrc = (src?: string) => Boolean(src && /\.(mp4|webm|ogg|mov)$/i.test(src));
+const ctaHref = entry.data.ctaHref ?? "/contact";
+const ctaLabel = entry.data.ctaLabel ?? labels.ctaButton;
+const shareUrl = encodeURIComponent(canonicalURL.href);
+const shareTitle = encodeURIComponent(entry.data.title);
+const shareLabel =
+  locale === "vi" ? "Chia sẻ dự án này:" : locale === "zh-cn" ? "分享这个项目:" : "Share this project:";
+const backToTopLabel = locale === "vi" ? "Lên đầu trang" : locale === "zh-cn" ? "回到顶部" : "Back to Top";
+const previousWorkLabel = locale === "vi" ? "Dự án trước" : locale === "zh-cn" ? "上一个项目" : "Previous Project";
+const nextWorkLabel = locale === "vi" ? "Dự án tiếp theo" : locale === "zh-cn" ? "下一个项目" : "Next Project";
+---
+
+<Layout
+  title={`${entry.data.title} | ${SITE.title}`}
+  description={entry.data.description}
+  canonicalURL={canonicalURL}
+  locale={locale}
+>
+  <Header locale={locale} switcherPathname={getLocalizedPath(locale, `/work/${slug}`)} />
+  <main class="site-shell pb-12">
+    <article class="content-width" data-pagefind-body>
+      <div class="border-b border-border pb-8">
+        <a href={getLocalizedPath(locale, "/work")} class="text-sm tracking-[0.06em] text-subtle-foreground hover:text-accent">
+          {t.nav.work} / {entry.data.title}
+        </a>
+
+        <div class="mt-7 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+          <div>
+            <h1
+              data-pagefind-meta="title"
+              data-pagefind-weight="10"
+              class="text-[2.8rem] leading-[0.98] font-semibold tracking-[-0.04em] text-foreground sm:text-[3.7rem]"
+            >
+              {entry.data.title}
+            </h1>
+            <p class="mt-4 text-[1.2rem] leading-8 text-foreground">{entry.data.summary}</p>
+            <p class="mt-8 max-w-[34rem] text-[1.04rem] leading-8 text-muted-foreground">{entry.data.description}</p>
+          </div>
+
+          <div class="overflow-hidden border border-border bg-surface">
+            {
+              heroImage ? (
+                <button
+                  type="button"
+                  class="block w-full cursor-zoom-in border-0 bg-surface p-0"
+                  data-image-viewer-trigger
+                  data-image-src={heroImage}
+                  data-image-label={entry.data.title}
+                  data-image-description={entry.data.summary}
+                  aria-label={`Open ${entry.data.title} image`}
+                >
+                  <img src={heroImage} alt="" class="block h-auto w-full" loading="lazy" />
+                </button>
+              ) : (
+                <div class="flex min-h-[280px] items-center justify-center text-center text-sm tracking-[0.12em] text-subtle-foreground">
+                  {entry.data.heroLabel ?? entry.data.title}
+                </div>
+              )
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="border-b border-border">
+        {
+          entry.data.links.length > 0 && (
+            <div class="grid gap-4 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+              <div class="text-[1.08rem] font-semibold text-foreground">{t.work.links}</div>
+              <div class="flex w-full flex-wrap items-start gap-x-8 gap-y-4 text-[1rem] text-foreground">
+                {entry.data.links.map(link => {
+                  const isLocalLink = link.href.startsWith("#");
+                  return (
+                    <div class="min-w-0 flex-1">
+                      <a
+                        href={link.href}
+                        target={isLocalLink ? undefined : "_blank"}
+                        rel={isLocalLink ? undefined : "noreferrer"}
+                        class="border-b border-border-strong pb-1 hover:border-accent hover:text-accent"
+                      >
+                        {link.label}
+                      </a>
+                      {link.note && (
+                        <p id={isLocalLink ? link.href.slice(1) : undefined} class="mt-2 max-w-[62rem] text-[0.82rem] leading-5 text-muted-foreground">
+                          {link.note}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )
+        }
+
+        <div class="grid gap-4 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+          <div class="text-[1.08rem] font-semibold text-foreground">{t.work.overview}</div>
+          <div class="text-[1.05rem] leading-8 text-foreground">{overview}</div>
+        </div>
+
+        <div class="grid gap-4 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+          <div class="text-[1.08rem] font-semibold text-foreground">{t.work.problem}</div>
+          <div class="text-[1.05rem] leading-8 text-foreground">{problem}</div>
+        </div>
+
+        <div class="grid gap-4 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+          <div class="text-[1.08rem] font-semibold text-foreground">{t.work.role}</div>
+          <div class="text-[1.05rem] leading-8 text-foreground">{entry.data.role}</div>
+        </div>
+
+        <div class="grid gap-4 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+          <div class="text-[1.08rem] font-semibold text-foreground">{t.work.approach}</div>
+          <div class="text-[1.05rem] leading-8 text-foreground">{approach}</div>
+        </div>
+
+        <div class="grid gap-5 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+          <div class="text-[1.08rem] font-semibold text-foreground">{t.work.outcomes}</div>
+          <div class="space-y-5">
+            {
+              metrics.length > 0 && (
+              <div class="grid gap-5 sm:grid-cols-3">
+                {metrics.map(metric => (
+                  <div>
+                    <div class="text-[2.1rem] leading-none font-semibold tracking-[-0.04em] text-foreground">
+                      {metric.value}
+                    </div>
+                    <div class="mt-2 text-[1rem] leading-7 text-muted-foreground">{metric.label}</div>
+                  </div>
+                ))}
+              </div>
+              )
+            }
+            {
+              detailOutcomes.length > 0 && (
+                <div class="text-[1.05rem] leading-8 text-foreground">
+                  <ul class="list-disc pl-5">
+                    {detailOutcomes.map(outcome => <li>{outcome}</li>)}
+                  </ul>
+                </div>
+              )
+            }
+          </div>
+        </div>
+
+        {
+          deploymentMatrix && (
+            <div class="grid gap-4 border-b border-border py-5 md:grid-cols-[150px_1fr]">
+              <div class="text-[1.08rem] font-semibold text-foreground">{deploymentMatrix.title}</div>
+              <div>
+                <div class="overflow-x-auto border border-border">
+                  <table class="min-w-[680px] w-full border-collapse text-left text-[0.94rem] leading-6">
+                    <thead class="bg-surface text-[0.76rem] uppercase tracking-[0.08em] text-subtle-foreground">
+                      <tr>
+                        <th class="border-b border-border px-4 py-3 font-semibold">
+                          {locale === "vi" ? "Nhóm thiết bị" : locale === "zh-cn" ? "设备组" : "Device group"}
+                        </th>
+                        <th class="border-b border-border px-4 py-3 font-semibold">
+                          {locale === "vi" ? "Runtime phù hợp để thử nghiệm" : locale === "zh-cn" ? "适合测试的 runtime" : "Runtime to test"}
+                        </th>
+                        <th class="border-b border-border px-4 py-3 font-semibold">
+                          {locale === "vi" ? "Nội dung đánh giá" : locale === "zh-cn" ? "评估内容" : "Evaluation focus"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {deploymentMatrix.rows.map(row => (
+                        <tr class="border-b border-border last:border-b-0">
+                          <td class="px-4 py-3 font-semibold text-foreground">{row.deviceGroup}</td>
+                          <td class="px-4 py-3 text-foreground">{row.runtime}</td>
+                          <td class="px-4 py-3 text-muted-foreground">{row.evaluation}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {deploymentMatrix.note && <p class="mt-3 text-[0.94rem] leading-7 text-muted-foreground">{deploymentMatrix.note}</p>}
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <section class="mt-8">
+        <h2 class="work-detail-heading">{labels.highlights}</h2>
+        <div class="grid border border-border md:grid-cols-4">
+          {highlights.slice(0, 4).map(item => (
+            <div class="group relative min-h-[170px] overflow-hidden border-b border-border bg-surface md:border-r md:border-b-0 last:border-r-0">
+              {item.src && !isVideoSrc(item.src) && (
+                <button
+                  type="button"
+                  class="absolute inset-0 z-10 cursor-zoom-in border-0 bg-transparent p-0"
+                  data-image-viewer-trigger
+                  data-image-src={item.src}
+                  data-image-label={item.title ?? item.label ?? entry.data.title}
+                  data-image-description={item.description ?? ""}
+                  aria-label={`Open ${item.title ?? item.label ?? entry.data.title} image`}
+                >
+                  <span class="sr-only">{item.title ?? item.label ?? entry.data.title}</span>
+                </button>
+              )}
+              {item.src && isVideoSrc(item.src) && (
+                <button
+                  type="button"
+                  class="absolute inset-0 z-10 cursor-zoom-in border-0 bg-transparent p-0"
+                  data-image-viewer-trigger
+                  data-image-src={item.src}
+                  data-image-label={item.title ?? item.label ?? entry.data.title}
+                  data-image-description={item.description ?? ""}
+                  data-media-type="video"
+                  aria-label={`Open ${item.title ?? item.label ?? entry.data.title} video`}
+                >
+                  <span class="sr-only">{item.title ?? item.label ?? entry.data.title}</span>
+                </button>
+              )}
+              {
+                item.src && isVideoSrc(item.src) ? (
+                  <div class="absolute inset-0">
+                    <video
+                      src={item.src}
+                      class="h-full w-full object-contain p-2 transition duration-500 group-hover:scale-[1.02]"
+                      preload="metadata"
+                      muted
+                      playsinline
+                    ></video>
+                    <span class="pointer-events-none absolute left-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#181512]/70 text-[#fff9f2] backdrop-blur-sm" aria-hidden="true">
+                      <span class="ml-0.5 h-0 w-0 border-y-[6px] border-l-[10px] border-y-transparent border-l-current"></span>
+                    </span>
+                  </div>
+                ) : item.src ? (
+                  <img src={item.src} alt="" class="absolute inset-0 h-full w-full object-contain p-2 transition duration-500 group-hover:scale-[1.02]" loading="lazy" />
+                ) : (
+                  <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(231,224,203,0.94),rgba(211,201,177,0.55))]"></div>
+                )
+              }
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#181512]/80 via-[#181512]/15 to-transparent"></div>
+              <div class="pointer-events-none relative flex h-full min-h-[170px] flex-col justify-end p-4 text-[#fff9f2]">
+                <div class="text-[0.76rem] font-semibold drop-shadow-sm">{item.title ?? item.label ?? entry.data.title}</div>
+                <p class="mt-1 line-clamp-2 text-[0.82rem] leading-5 text-[#fff9f2]/82 drop-shadow-sm">{item.description ?? labels.emptyMedia}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="work-detail-heading">{labels.video}</h2>
+        <div class="grid items-start gap-8 lg:grid-cols-[minmax(0,1.12fr)_minmax(280px,0.88fr)]">
+          <div class="self-start overflow-hidden border border-border bg-[#171919]">
+            {
+              entry.data.video?.src ? (
+                <video controls preload="metadata" class="block aspect-video w-full">
+                  <source src={entry.data.video.src} />
+                </video>
+              ) : (
+                <div class="flex aspect-video flex-col justify-between p-6 text-[#fff9f2]">
+                  <div>
+                    <div class="text-[1.4rem] font-semibold tracking-[-0.03em]">{entry.data.title}</div>
+                    <div class="mt-2 text-sm text-[#fff9f2]/70">Walkthrough placeholder</div>
+                  </div>
+                  <div class="flex items-center gap-3 text-xs text-[#fff9f2]/70">
+                    <span class="inline-block h-0 w-0 border-y-[6px] border-l-[9px] border-y-transparent border-l-[#fff9f2]"></span>
+                    <span>00:00 / 00:00</span>
+                  </div>
+                </div>
+              )
+            }
+          </div>
+
+          <div class="border-t border-border pt-5 lg:border-t-0 lg:pt-0">
+            <h3 class="text-[1.1rem] font-semibold tracking-[-0.02em] text-foreground">Timeline</h3>
+            <div class="mt-5 space-y-0">
+              {timeline.slice(0, 6).map((item, index) => (
+                <div class="grid grid-cols-[74px_1fr] gap-5">
+                  <div class="relative pb-5 text-[0.78rem] font-semibold text-foreground">
+                    <span class="relative z-10 inline-flex items-center bg-background pr-2">{item.date}</span>
+                    <span class="absolute top-[0.5rem] right-[-0.15rem] h-2 w-2 rounded-full bg-accent-soft"></span>
+                    {index < Math.min(timeline.length, 6) - 1 && <span class="absolute top-[0.85rem] right-[0.08rem] h-full w-px bg-border-strong"></span>}
+                  </div>
+                  <div class="pb-5">
+                    <div class="text-[0.95rem] font-semibold leading-5 text-foreground">{item.label}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="work-detail-heading">{labels.story}</h2>
+        <div class="grid border border-border md:grid-cols-2">
+          {storyBlocks.slice(0, 4).map((block, index) => (
+            <div class:list={[
+              "min-h-[230px] border-b border-border md:border-r",
+              index % 2 === 1 ? "md:border-r-0" : "",
+              index > 1 ? "md:border-b-0" : "",
+            ]}>
+              <div class="flex h-full min-h-[230px] flex-col justify-center p-8">
+                <h3 class="text-[1.25rem] font-semibold tracking-[-0.03em] text-foreground">{block.title}</h3>
+                <p class="mt-4 text-[0.98rem] leading-7 text-muted-foreground">{block.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="work-detail-heading">{labels.gallery}</h2>
+        <div class="relative">
+          <div class="work-gallery-rail flex cursor-grab gap-3 overflow-x-auto scroll-smooth pr-14 active:cursor-grabbing" data-work-gallery>
+            {gallery.map(item => (
+              <div class="h-[126px] w-[206px] shrink-0 overflow-hidden border border-border bg-surface sm:h-[148px] sm:w-[244px]">
+                {
+                  item.src && isVideoSrc(item.src) ? (
+                    <button
+                      type="button"
+                      class="group relative block h-full w-full cursor-zoom-in border-0 bg-surface p-0"
+                      data-image-viewer-trigger
+                      data-image-src={item.src}
+                      data-image-label={item.label ?? entry.data.title}
+                      data-image-description=""
+                      data-media-type="video"
+                      data-gallery-image-trigger
+                      aria-label={`Open ${item.label ?? entry.data.title} video`}
+                    >
+                      <video
+                        src={item.src}
+                        class="h-full w-full object-contain p-1 transition duration-300 group-hover:scale-[1.02]"
+                        preload="metadata"
+                        muted
+                        playsinline
+                        draggable="false"
+                      ></video>
+                      <span class="pointer-events-none absolute left-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#181512]/70 text-[#fff9f2] backdrop-blur-sm" aria-hidden="true">
+                        <span class="ml-0.5 h-0 w-0 border-y-[5px] border-l-[8px] border-y-transparent border-l-current"></span>
+                      </span>
+                    </button>
+                  ) : item.src ? (
+                    <button
+                      type="button"
+                      class="block h-full w-full cursor-zoom-in border-0 bg-surface p-0"
+                      data-image-viewer-trigger
+                      data-image-src={item.src}
+                      data-image-label={item.label ?? entry.data.title}
+                      data-image-description=""
+                      data-gallery-image-trigger
+                      aria-label={`Open ${item.label ?? entry.data.title} image`}
+                    >
+                      <img src={item.src} alt="" class="h-full w-full object-contain p-1" loading="lazy" draggable="false" />
+                    </button>
+                  ) : (
+                    <div class="flex h-full w-full items-center justify-center px-4 text-center text-[0.72rem] leading-5 tracking-[0.08em] text-subtle-foreground">
+                      {item.label ?? labels.emptyMedia}
+                    </div>
+                  )
+                }
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            class="work-gallery-next-button absolute right-1 top-[63px] flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 text-[0px] text-foreground shadow-sm backdrop-blur transition hover:border-accent hover:text-accent sm:top-[74px]"
+            aria-label="Next gallery item"
+            data-work-gallery-next
+          >
+            ›
+          </button>
+        </div>
+      </section>
+
+      <section class="mt-8 border border-border px-7 py-6">
+        <div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <h2 class="text-[1.25rem] font-semibold tracking-[-0.03em] text-foreground">{labels.ctaTitle}</h2>
+            <p class="mt-2 text-[0.98rem] leading-7 text-muted-foreground">{labels.ctaBody}</p>
+          </div>
+          <a href={getLocalizedPath(locale, ctaHref)} class="inline-flex items-center justify-center bg-foreground px-7 py-3 text-sm text-background hover:bg-accent">
+            {ctaLabel} <span class="ml-2" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+
+      <div
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-[#15120f]/88 p-4 backdrop-blur-sm"
+        data-image-viewer
+        aria-hidden="true"
+      >
+        <button
+          type="button"
+          class="absolute inset-0 cursor-zoom-out border-0 bg-transparent"
+          data-image-viewer-close
+          aria-label="Close image viewer"
+        ></button>
+        <button
+          type="button"
+          class="image-viewer-prev-button absolute left-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-[#fff9f2]/35 bg-[#fff9f2]/10 text-[0px] text-[#fff9f2] backdrop-blur transition hover:bg-[#fff9f2]/18"
+          data-image-viewer-prev
+          aria-label="Previous image"
+        ></button>
+        <figure class="relative z-10 max-h-[92vh] w-full max-w-[min(1200px,94vw)]">
+          <div class="border border-[#fff9f2]/18 bg-[#fff9f2] p-2 shadow-2xl">
+            <img src="" alt="" class="max-h-[82vh] w-full object-contain" data-image-viewer-image />
+            <video
+              src=""
+              class="hidden max-h-[82vh] w-full bg-[#15120f] object-contain"
+              data-image-viewer-video
+              controls
+              preload="metadata"
+              playsinline
+            ></video>
+          </div>
+          <figcaption class="mx-auto mt-3 max-w-[720px] text-center text-sm leading-6 text-[#fff9f2]/82">
+            <div class="font-semibold text-[#fff9f2]" data-image-viewer-caption></div>
+            <div class="mt-1 text-[#fff9f2]/72" data-image-viewer-description></div>
+          </figcaption>
+        </figure>
+        <button
+          type="button"
+          class="image-viewer-next-button absolute right-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-[#fff9f2]/35 bg-[#fff9f2]/10 text-[0px] text-[#fff9f2] backdrop-blur transition hover:bg-[#fff9f2]/18"
+          data-image-viewer-next
+          aria-label="Next image"
+        ></button>
+        <button
+          type="button"
+          class="image-viewer-close-button absolute top-4 right-4 z-30 flex h-10 w-10 items-center justify-center border border-[#fff9f2]/35 bg-[#fff9f2]/10 text-[0px] text-[#fff9f2] backdrop-blur transition hover:bg-[#fff9f2]/18"
+          data-image-viewer-close
+          data-image-viewer-close-button
+          aria-label="Close image viewer"
+        >
+          ×
+        </button>
+      </div>
+
+      {
+        showBody && (
+          <div class="prose mt-10 max-w-none border-t border-border pt-8">
+            <slot />
+          </div>
+        )
+      }
+
+      <section class="mt-12 border-t border-border pt-7">
+        <div class="flex flex-wrap items-center justify-between gap-6 border-b border-border pb-7">
+          <div class="flex items-center gap-4">
+            <span class="font-serif text-[1.05rem] italic text-subtle-foreground">{shareLabel}</span>
+            <div class="flex items-center gap-3 text-foreground/70">
+              <a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareTitle}`} target="_blank" rel="noreferrer" class="transition-colors hover:text-foreground" title="Share on X">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path></svg>
+              </a>
+              <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareTitle}`} target="_blank" rel="noreferrer" class="transition-colors hover:text-foreground" title="Share on LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+              <a href={`https://www.facebook.com/sharer.php?u=${shareUrl}`} target="_blank" rel="noreferrer" class="transition-colors hover:text-foreground" title="Share on Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+              </a>
+              <a href={`mailto:?subject=${shareTitle}&body=${shareUrl}`} class="transition-colors hover:text-foreground" title="Share via Email">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+          <button
+            onclick="window.scrollTo({top:0, behavior:'smooth'})"
+            class="flex cursor-pointer items-center gap-1.5 border-none bg-transparent text-[0.92rem] text-foreground transition-colors hover:text-accent"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            {backToTopLabel}
+          </button>
+        </div>
+
+        <div class="mt-8 grid gap-8 text-[0.95rem] sm:grid-cols-2">
+          <div>
+            {previousWork && (
+              <a href={getLocalizedPath(locale, `/work/${getWorkSlug(previousWork.id)}`)} class="group flex flex-col items-start gap-2">
+                <span class="flex items-center gap-1.5 text-subtle-foreground">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-x-1" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  {previousWorkLabel}
+                </span>
+                <span class="line-clamp-2 text-[#15803d] group-hover:underline dark:text-accent">{previousWork.data.title}</span>
+              </a>
+            )}
+          </div>
+          <div class="sm:text-right">
+            {nextWork && (
+              <a href={getLocalizedPath(locale, `/work/${getWorkSlug(nextWork.id)}`)} class="group flex flex-col gap-2 sm:items-end">
+                <span class="flex items-center gap-1.5 text-subtle-foreground">
+                  {nextWorkLabel}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </span>
+                <span class="line-clamp-2 text-[#15803d] group-hover:underline dark:text-accent sm:text-right">{nextWork.data.title}</span>
+              </a>
+            )}
+          </div>
+        </div>
+      </section>
+    </article>
+  </main>
+  <Footer locale={locale} />
+</Layout>
+
+<script>
+  const galleryRail = document.querySelector<HTMLElement>("[data-work-gallery]");
+  const galleryNext = document.querySelector<HTMLButtonElement>("[data-work-gallery-next]");
+  const imageViewer = document.querySelector<HTMLElement>("[data-image-viewer]");
+  const imageViewerImage = document.querySelector<HTMLImageElement>("[data-image-viewer-image]");
+  const imageViewerVideo = document.querySelector<HTMLVideoElement>("[data-image-viewer-video]");
+  const imageViewerCaption = document.querySelector<HTMLElement>("[data-image-viewer-caption]");
+  const imageViewerDescription = document.querySelector<HTMLElement>("[data-image-viewer-description]");
+  const imageViewerTriggers = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-image-viewer-trigger]"));
+  const imageViewerCloseButtons = document.querySelectorAll<HTMLButtonElement>("[data-image-viewer-close]");
+  const imageViewerPrev = document.querySelector<HTMLButtonElement>("[data-image-viewer-prev]");
+  const imageViewerNext = document.querySelector<HTMLButtonElement>("[data-image-viewer-next]");
+  const imageViewerItems = imageViewerTriggers.map(trigger => ({
+    src: trigger.dataset.imageSrc ?? "",
+    label: trigger.dataset.imageLabel ?? "",
+    description: trigger.dataset.imageDescription ?? "",
+    type: trigger.dataset.mediaType === "video" ? "video" : "image",
+  })).filter(item => item.src);
+  let activeImageIndex = 0;
+
+  if (galleryRail) {
+    let isPointerDown = false;
+    let hasDragged = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+    let activePointerId: number | null = null;
+
+    const resetGalleryDrag = () => {
+      isPointerDown = false;
+      activePointerId = null;
+      galleryRail.classList.remove("is-dragging");
+    };
+
+    galleryRail.addEventListener("pointerdown", event => {
+      isPointerDown = true;
+      hasDragged = false;
+      activePointerId = event.pointerId;
+      startX = event.clientX;
+      startScrollLeft = galleryRail.scrollLeft;
+    });
+
+    galleryRail.addEventListener("pointermove", event => {
+      if (!isPointerDown) return;
+      if (Math.abs(event.clientX - startX) > 6) {
+        hasDragged = true;
+        galleryRail.classList.add("is-dragging");
+        if (!galleryRail.hasPointerCapture(event.pointerId)) {
+          galleryRail.setPointerCapture(event.pointerId);
+        }
+      }
+      if (!hasDragged) return;
+
+      event.preventDefault();
+      galleryRail.scrollLeft = startScrollLeft - (event.clientX - startX);
+    });
+
+    galleryRail.addEventListener("pointerup", event => {
+      if (galleryRail.hasPointerCapture(event.pointerId)) {
+        galleryRail.releasePointerCapture(event.pointerId);
+      }
+      resetGalleryDrag();
+    });
+
+    galleryRail.addEventListener(
+      "click",
+      event => {
+        if (!hasDragged) return;
+        event.preventDefault();
+        event.stopPropagation();
+        hasDragged = false;
+      },
+      true,
+    );
+
+    galleryRail.addEventListener("pointercancel", () => {
+      hasDragged = false;
+      resetGalleryDrag();
+    });
+
+    window.addEventListener("pointerup", event => {
+      if (activePointerId !== null && activePointerId !== event.pointerId) return;
+      resetGalleryDrag();
+    });
+
+    window.addEventListener("blur", resetGalleryDrag);
+  }
+
+  const scrollGalleryFromWheel = (rail: HTMLElement, event: WheelEvent) => {
+    const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+    if (delta === 0) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    rail.scrollLeft += delta;
+  };
+
+  window.addEventListener(
+    "wheel",
+    event => {
+      const rail = event
+        .composedPath()
+        .find(target => target instanceof HTMLElement && target.matches("[data-work-gallery]")) as HTMLElement | undefined;
+      if (!rail) return;
+
+      scrollGalleryFromWheel(rail, event);
+    },
+    { capture: true, passive: false },
+  );
+
+  document.querySelectorAll<HTMLElement>("[data-gallery-image-trigger]").forEach(trigger => {
+    trigger.addEventListener(
+      "wheel",
+      event => {
+        const rail = trigger.closest<HTMLElement>("[data-work-gallery]");
+        if (!rail) return;
+
+        scrollGalleryFromWheel(rail, event);
+      },
+      { passive: false },
+    );
+  });
+
+  galleryNext?.addEventListener("click", () => {
+    galleryRail?.scrollBy({ left: 240, behavior: "smooth" });
+  });
+
+  const renderImageViewer = (index: number) => {
+    if (!imageViewerImage || !imageViewerVideo || !imageViewerCaption || !imageViewerDescription || imageViewerItems.length === 0) return;
+    activeImageIndex = (index + imageViewerItems.length) % imageViewerItems.length;
+    const item = imageViewerItems[activeImageIndex];
+
+    imageViewerVideo.pause();
+    imageViewerVideo.removeAttribute("src");
+    imageViewerVideo.load();
+    imageViewerImage.removeAttribute("src");
+
+    if (item.type === "video") {
+      imageViewerImage.classList.add("hidden");
+      imageViewerVideo.classList.remove("hidden");
+      imageViewerVideo.src = item.src;
+      imageViewerVideo.load();
+      imageViewerVideo.play().catch(() => {
+        // Autoplay can be blocked; controls remain available.
+      });
+    } else {
+      imageViewerVideo.classList.add("hidden");
+      imageViewerImage.classList.remove("hidden");
+      imageViewerImage.src = item.src;
+      imageViewerImage.alt = item.label;
+    }
+
+    imageViewerCaption.textContent = item.label;
+    imageViewerDescription.textContent = item.description;
+  };
+
+  const openImageViewer = (index: number) => {
+    if (!imageViewer) return;
+    renderImageViewer(index);
+    imageViewer.classList.remove("hidden");
+    imageViewer.classList.add("flex");
+    imageViewer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeImageViewer = () => {
+    if (!imageViewer || !imageViewerImage || !imageViewerVideo) return;
+    imageViewer.classList.add("hidden");
+    imageViewer.classList.remove("flex");
+    imageViewer.setAttribute("aria-hidden", "true");
+    imageViewerImage.removeAttribute("src");
+    imageViewerVideo.pause();
+    imageViewerVideo.removeAttribute("src");
+    imageViewerVideo.load();
+    document.body.style.overflow = "";
+  };
+
+  imageViewerTriggers.forEach((trigger, index) => {
+    trigger.addEventListener("click", () => {
+      openImageViewer(index);
+    });
+  });
+
+  imageViewerPrev?.addEventListener("click", () => {
+    renderImageViewer(activeImageIndex - 1);
+  });
+
+  imageViewerNext?.addEventListener("click", () => {
+    renderImageViewer(activeImageIndex + 1);
+  });
+
+  imageViewerCloseButtons.forEach(button => {
+    button.addEventListener("click", closeImageViewer);
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeImageViewer();
+    if (imageViewer?.getAttribute("aria-hidden") === "false" && event.key === "ArrowLeft") renderImageViewer(activeImageIndex - 1);
+    if (imageViewer?.getAttribute("aria-hidden") === "false" && event.key === "ArrowRight") renderImageViewer(activeImageIndex + 1);
+  });
+</script>
+
+<style>
+  .work-detail-heading {
+    margin-bottom: 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+
+  .work-gallery-rail {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .work-gallery-rail.is-dragging {
+    cursor: grabbing;
+  }
+
+  .work-gallery-rail.is-dragging [data-gallery-image-trigger] {
+    pointer-events: none;
+    cursor: grabbing;
+  }
+
+  .work-gallery-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .work-gallery-next-button::before,
+  .image-viewer-next-button::before,
+  .image-viewer-prev-button::before,
+  .image-viewer-close-button::before,
+  .image-viewer-close-button::after {
+    content: "";
+    position: absolute;
+    display: block;
+  }
+
+  .work-gallery-next-button::before,
+  .image-viewer-next-button::before,
+  .image-viewer-prev-button::before {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-top: 1.8px solid currentColor;
+    border-right: 1.8px solid currentColor;
+    color: currentColor;
+  }
+
+  .work-gallery-next-button,
+  .image-viewer-next-button,
+  .image-viewer-prev-button,
+  .image-viewer-close-button {
+    color: currentColor;
+  }
+
+  .work-gallery-next-button::before,
+  .image-viewer-next-button::before {
+    transform: translateX(-1px) rotate(45deg);
+  }
+
+  .image-viewer-prev-button::before {
+    transform: translateX(1px) rotate(-135deg);
+  }
+
+  .image-viewer-close-button::before,
+  .image-viewer-close-button::after {
+    width: 1rem;
+    height: 1.8px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  .image-viewer-close-button::before {
+    transform: rotate(45deg);
+  }
+
+  .image-viewer-close-button::after {
+    transform: rotate(-45deg);
+  }
+</style>

@@ -1,0 +1,65 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { SITE } from "@/config";
+import type { Locale } from "@/i18n/config";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { getPostSlug } from "@/utils/content";
+import Layout from "@/layouts/Layout.astro";
+import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  locale: Locale;
+  posts: CollectionEntry<"blog">[];
+}
+
+const { locale, posts } = Astro.props;
+const t = useTranslations(locale);
+const grouped = Object.entries(
+  getPostsByGroupCondition(posts, post => new Date(post.data.pubDatetime).getFullYear()),
+).sort(([a], [b]) => Number(b) - Number(a));
+---
+
+<Layout title={`${t.archive.title} | ${SITE.title}`} description={t.archive.desc} locale={locale}>
+  <Header locale={locale} />
+  <main class="site-shell pb-12">
+    <section class="content-width pt-4">
+      <SectionHeading title={t.archive.title} />
+      <p class="mb-10 max-w-[34rem] text-[1rem] leading-8 text-muted-foreground">{t.archive.desc}</p>
+
+      <div class="space-y-12">
+        {grouped.map(([year, entries]) => (
+          <section>
+            <div class="border-b border-border pb-3 mb-2">
+              <h2 class="text-[2rem] font-semibold leading-none tracking-[-0.04em] text-foreground">
+                {year}
+                <span class="ml-1.5 text-[1.05rem] font-medium text-subtle-foreground relative -top-3">{entries.length}</span>
+              </h2>
+            </div>
+
+            <ul class="flex flex-col">
+                {entries.map(entry => (
+                  <li class="group">
+                    <a href={getLocalizedPath(locale, `/posts/${getPostSlug(entry.id)}`)} class="block">
+                      <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                        <h3 class="text-[1.15rem] font-semibold tracking-[-0.01em] text-foreground transition group-hover:text-accent">
+                          {entry.data.title}
+                        </h3>
+                      </div>
+                      <p class="mt-2 max-w-[56ch] text-[0.98rem] leading-7 text-muted-foreground">
+                        {entry.data.description}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ))}
+      </div>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Layout>

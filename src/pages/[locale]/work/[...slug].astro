@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from "astro:content";
+import { NON_DEFAULT_LOCALES } from "@/i18n/config";
+import WorkLayout from "@/layouts/WorkLayout.astro";
+import { getWorkSlug } from "@/utils/content";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of NON_DEFAULT_LOCALES) {
+    const entries = await getCollection("work", entry => (entry.data.locale ?? "en") === locale && !entry.data.draft);
+    paths.push(
+      ...entries.map(entry => ({
+        params: { locale, slug: getWorkSlug(entry.id) },
+        props: { locale, entry },
+      })),
+    );
+  }
+  return paths;
+}
+
+const { locale, entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<WorkLayout {locale} {entry}>
+  <Content />
+</WorkLayout>

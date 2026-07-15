@@ -1,0 +1,22 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { SITE } from "@/config";
+import { useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+import { getLocalizedFeaturedPosts, getLocalizedFeaturedWork } from "@/utils/content";
+import AboutPageContent from "@/components/pages/AboutPageContent.astro";
+
+const locale = "en";
+const t = useTranslations(locale);
+const posts = await getLocalizedFeaturedPosts(locale, 4);
+const work = await getLocalizedFeaturedWork(locale, 4);
+---
+
+<Layout title={`${t.about.title} | ${SITE.title}`} description={t.about.intro} locale={locale}>
+  <Header locale={locale} />
+  <main class="site-shell pb-12">
+    <AboutPageContent locale={locale} posts={posts} work={work} />
+  </main>
+  <Footer locale={locale} />
+</Layout>

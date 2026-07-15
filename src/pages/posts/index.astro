@@ -1,0 +1,9 @@
+---
+import WritingPage from "@/components/pages/WritingPage.astro";
+import { getLocalizedPosts } from "@/utils/content";
+
+const locale = "en";
+const posts = await getLocalizedPosts(locale);
+---
+
+<WritingPage locale={locale} posts={posts} />

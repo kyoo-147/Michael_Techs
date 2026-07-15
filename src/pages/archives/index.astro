@@ -1,0 +1,9 @@
+---
+import ArchivePage from "@/components/pages/ArchivePage.astro";
+import { getLocalizedPosts } from "@/utils/content";
+
+const locale = "en";
+const posts = await getLocalizedPosts(locale);
+---
+
+<ArchivePage locale={locale} posts={posts} />

@@ -1,0 +1,70 @@
+---
+import "@pagefind/default-ui/css/ui.css";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import { SITE } from "@/config";
+import { useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+
+const locale = "en";
+const t = useTranslations(locale);
+---
+
+<Layout title={`${t.search.title} | ${SITE.title}`} description={t.search.desc} locale={locale}>
+  <Header locale={locale} />
+  <main class="site-shell pb-12">
+    <section class="content-width pt-4">
+      <SectionHeading title={t.search.title} />
+      <p class="mb-8 text-[1rem] leading-8 text-muted-foreground">{t.search.desc}</p>
+      <div id="pagefind-search"></div>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Layout>
+
+<script define:vars={{ placeholder: t.search.placeholder }}>
+  async function initSearch() {
+    const host = document.querySelector("#pagefind-search");
+    if (!host) return;
+
+    const bundlePath = "/pagefind/";
+    const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
+
+    onIdle(async () => {
+      const { PagefindUI } = await import("@pagefind/default-ui");
+
+      const search = new PagefindUI({
+        element: "#pagefind-search",
+        bundlePath,
+        showImages: false,
+      });
+
+      const input = document.querySelector(".pagefind-ui__search-input");
+      if (input instanceof HTMLInputElement) {
+        input.placeholder = placeholder;
+      }
+
+      return search;
+    });
+  }
+
+  initSearch();
+  document.addEventListener("astro:after-swap", initSearch);
+</script>
+
+<style is:global>
+  #pagefind-search {
+    --pagefind-ui-font: "Atkinson", "Segoe UI", Arial, sans-serif;
+    --pagefind-ui-background: var(--background);
+    --pagefind-ui-text: var(--foreground);
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: var(--surface);
+  }
+
+  #pagefind-search input {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+</style>

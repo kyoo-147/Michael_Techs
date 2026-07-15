@@ -1,0 +1,35 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import Tag from "@/components/Tag.astro";
+import { SITE } from "@/config";
+import { NON_DEFAULT_LOCALES } from "@/i18n/config";
+import { useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+import { getLocalizedPosts } from "@/utils/content";
+import getUniqueTags from "@/utils/getUniqueTags";
+
+export async function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map(locale => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as "vi" | "zh-cn";
+const t = useTranslations(locale);
+const posts = await getLocalizedPosts(locale);
+const tags = getUniqueTags(posts);
+---
+
+<Layout title={`${t.tags.title} | ${SITE.title}`} description={t.tags.desc} locale={locale}>
+  <Header locale={locale} />
+  <main class="site-shell pb-12">
+    <section class="content-width pt-4">
+      <SectionHeading title={t.tags.title} />
+      <p class="mb-8 text-[1rem] leading-8 text-muted-foreground">{t.tags.desc}</p>
+      <ul class="flex flex-wrap gap-3">
+        {tags.map(tag => <Tag {...tag} locale={locale} />)}
+      </ul>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Layout>

@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from "astro:content";
+import { NON_DEFAULT_LOCALES } from "@/i18n/config";
+import PostLayout from "@/layouts/PostLayout.astro";
+import { getPostSlug } from "@/utils/content";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const locale of NON_DEFAULT_LOCALES) {
+    const posts = await getCollection(
+      "blog",
+      entry =>
+        (entry.data.locale ?? "en") === locale &&
+        !entry.data.draft &&
+        entry.data.source === "michael",
+    );
+    paths.push(
+      ...posts.map(post => ({
+        params: { locale, slug: getPostSlug(post.id) },
+        props: { locale, post },
+      })),
+    );
+  }
+  return paths;
+}
+
+const { locale, post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<PostLayout {locale} {post}>
+  <Content />
+</PostLayout>

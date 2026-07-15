@@ -1,0 +1,107 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import { SITE } from "@/config";
+import { NON_DEFAULT_LOCALES } from "@/i18n/config";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+import { getLocalizedWork, getWorkSlug } from "@/utils/content";
+
+export async function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map(locale => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as "vi" | "zh-cn";
+const t = useTranslations(locale);
+const work = await getLocalizedWork(locale);
+const fallbackImages: Record<string, string> = {
+  "oneclick-crm": "/assets/work-thumb-oneclick.png",
+  "snow-ai-companion": "/assets/work-thumb-snow.png",
+  "computer-vision-qc-system": "/assets/work-thumb-cv.png",
+  "autonomous-vehicle-research": "/assets/work-thumb-av.png",
+};
+
+const pageTitle =
+  locale === "vi" ? "Dự án chọn lọc" : locale === "zh-cn" ? "精选项目" : "Selected Work";
+const pageDescription =
+  locale === "vi"
+    ? "Một lựa chọn mang tính đại diện cho các sản phẩm và hệ thống tôi đã thiết kế, xây dựng và đưa vào phân phối."
+    : "A selection of representative products and systems that I have designed, built, and distributed.";
+
+const githubDescription =
+  locale === "vi"
+    ? "Những gì chưa được liệt kê ở đây đôi khi có thể được tìm thấy chi tiết trên "
+    : locale === "zh-cn"
+    ? "这里没有包含的一些内容有时可以在 "
+    : "Something I haven't included here can sometimes be found in detail on ";
+
+const githubTail =
+  locale === "vi"
+    ? ", hoặc đôi khi tôi chưa kịp cập nhật vào hồ sơ của mình. Một số dự án cũng là công việc với doanh nghiệp, nên tôi không được phép cung cấp công khai các thông tin chi tiết."
+    : locale === "zh-cn"
+    ? " 上找到详细信息，或者有时我还没有时间将它们添加到个人资料中。有些项目也属于企业合作项目，因此我不能公开提供详细信息。"
+    : ", or sometimes I haven't been able to add it to my profile yet. Some projects are also business work, so I am not allowed to share their details publicly.";
+const viewCaseLabel = locale === "vi" ? "Xem case" : locale === "zh-cn" ? "查看案例" : "View case";
+const projectCountLabel = locale === "vi" ? "dự án" : locale === "zh-cn" ? "项目" : "projects";
+---
+
+<Layout title={`${t.work.title} | ${SITE.title}`} description={t.work.desc} locale={locale}>
+  <Header locale={locale} />
+  <main class="site-shell pb-12">
+    <section class="content-width pt-8">
+      <h1 class="text-[3rem] leading-[0.98] font-semibold tracking-[-0.04em] text-foreground sm:text-[4rem]">
+        {pageTitle}
+      </h1>
+      <p class="mt-5 max-w-[44rem] text-[1.06rem] leading-8 text-muted-foreground">
+        {pageDescription}
+      </p>
+      <p class="mt-3 max-w-[44rem] text-[1.06rem] leading-8 text-muted-foreground">
+        {githubDescription}<a href="https://github.com/kyoo-147" target="_blank" rel="noopener noreferrer" class="underline decoration-muted-foreground underline-offset-4 hover:text-accent hover:decoration-accent transition-colors">GitHub</a>{githubTail}
+      </p>
+      <div class="mt-7 text-sm text-subtle-foreground">
+        {work.length} {projectCountLabel} · 2021-Present
+      </div>
+    </section>
+
+    <section class="content-width mt-10">
+      <ol class="border-t border-border">
+        {work.map((entry, index) => {
+          const slug = getWorkSlug(entry.id);
+          const thumb = entry.data.heroImage ?? fallbackImages[slug];
+
+          return (
+          <li class="grid gap-4 border-b border-border py-6 md:grid-cols-[32px_92px_1fr_auto] md:items-center md:gap-6">
+            <div class="text-[1.1rem] text-subtle-foreground">{index + 1}.</div>
+            <a href={getLocalizedPath(locale, `/work/${slug}`)} class="block">
+              <div class="h-[58px] w-[92px] overflow-hidden border border-border bg-surface">
+                {
+                  thumb ? (
+                    <img src={thumb} alt="" class="h-full w-full object-cover" loading="lazy" />
+                  ) : (
+                    <div class="flex h-full items-center justify-center px-2 text-center text-[0.62rem] uppercase tracking-[0.14em] text-subtle-foreground">
+                      {entry.data.heroLabel ?? "Case"}
+                    </div>
+                  )
+                }
+              </div>
+            </a>
+            <a href={getLocalizedPath(locale, `/work/${slug}`)} class="block">
+              <h2 class="text-[1.28rem] font-semibold tracking-[-0.02em] text-foreground hover:text-accent">
+                {entry.data.title}
+              </h2>
+              <p class="mt-2 text-[1rem] leading-7 text-muted-foreground">{entry.data.summary}</p>
+              <p class="mt-2 text-sm text-subtle-foreground">{entry.data.role} · {entry.data.period}</p>
+            </a>
+            <a
+              href={getLocalizedPath(locale, `/work/${slug}`)}
+              class="inline-flex items-center border-b border-border-strong pb-1 text-[1rem] text-foreground hover:border-accent hover:text-accent"
+            >
+              {viewCaseLabel}
+            </a>
+          </li>
+        )})}
+      </ol>
+    </section>
+  </main>
+  <Footer locale={locale} />
+</Layout>
