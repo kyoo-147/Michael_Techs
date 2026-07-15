@@ -42,7 +42,8 @@ export interface AboutData {
   };
   focus: {
     title: string;
-    description: string;
+    description?: string;
+    paragraphs: string[];
   };
   writing: {
     title: string;

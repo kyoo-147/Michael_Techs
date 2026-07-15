@@ -20,7 +20,7 @@ export interface Props {
 
 const { locale, posts, work } = Astro.props;
 const t = useTranslations(locale);
-const pageTitle = `${SITE.title} | ${t.siteDescription}`;
+const pageTitle = SITE.title;
 ---
 
 <Layout title={pageTitle} description={t.siteDescription} locale={locale}>

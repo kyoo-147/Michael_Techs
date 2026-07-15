@@ -10,6 +10,7 @@ export interface Props {
   ogImage?: string;
   canonicalURL?: string | URL;
   locale?: Locale;
+  scrollSmooth?: boolean;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
 const canonical =
   canonicalURL instanceof URL ? canonicalURL.toString() : canonicalURL;
 const socialImageURL = new URL(ogImage, Astro.url).toString();
+const socialImageAlt = `${SITE.title} - ${SITE.description}`;
 ---
 
 <!doctype html>
@@ -35,18 +37,26 @@ const socialImageURL = new URL(ogImage, Astro.url).toString();
     <meta name="author" content={SITE.author} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#f3eedf" />
+    <meta name="title" content={title} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico?v=mc" />
     <link rel="icon" type="image/png" href="/favicon-512.png?v=mc" />
     <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content={SITE.title} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image:secure_url" content={socialImageURL} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />
+    <meta property="twitter:image:alt" content={socialImageAlt} />
   </head>
   <body>
     <div class="page-frame">

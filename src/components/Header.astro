@@ -1,15 +1,15 @@
 ---
 import { SITE } from "@/config";
-import type { Locale } from "@/i18n/config";
+import { DEFAULT_LOCALE, type Locale } from "@/i18n/config";
 import { getLocalizedPath, stripLocaleFromPathname, useTranslations } from "@/i18n/utils";
 import LocaleSwitcher from "./LocaleSwitcher.astro";
 
 export interface Props {
-  locale: Locale;
+  locale?: Locale;
   switcherPathname?: string;
 }
 
-const { locale, switcherPathname } = Astro.props;
+const { locale = DEFAULT_LOCALE, switcherPathname } = Astro.props;
 const t = useTranslations(locale);
 const pathname = switcherPathname ?? Astro.url.pathname;
 const currentPath = stripLocaleFromPathname(pathname);

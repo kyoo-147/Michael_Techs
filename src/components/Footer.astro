@@ -1,14 +1,9 @@
 ---
-import { CONTACT } from "@/config";
 import type { Locale } from "@/i18n/config";
-import { useTranslations } from "@/i18n/utils";
 
 export interface Props {
-  locale: Locale;
+  locale?: Locale;
 }
-
-const { locale } = Astro.props;
-const t = useTranslations(locale);
 ---
 
 <footer id="contact" class="site-shell pb-8 pt-12 text-sm text-muted-foreground">

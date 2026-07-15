@@ -28,7 +28,7 @@ const currentIndex = allPosts.findIndex(p => p.id === post.id);
 const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 
-const readTime = calculateReadingTime(post.body);
+const readTime = calculateReadingTime(post.body ?? "");
 const dateString = post.data.pubDatetime.toLocaleDateString(
   locale === "vi" ? "vi-VN" : locale === "zh-cn" ? "zh-CN" : "en-US",
   {

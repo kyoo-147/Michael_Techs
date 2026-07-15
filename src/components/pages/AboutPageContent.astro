@@ -119,7 +119,7 @@ const data = aboutData[locale];
   <section>
     <h2 class="mb-6 text-[2rem] font-semibold tracking-[-0.03em] text-foreground">{data.focus.title}</h2>
     <div class="space-y-4 max-w-[42rem] text-[1.02rem] leading-8 text-muted-foreground">
-      {data.focus.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      {data.focus.paragraphs.map((paragraph: string) => <p>{paragraph}</p>)}
     </div>
   </section>
 

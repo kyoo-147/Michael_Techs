@@ -94,14 +94,13 @@ const grouped = Object.entries(
                         {entry.data.pubDatetime.toLocaleDateString(locale === "zh-cn" ? "zh-CN" : locale, {
                           month: "short",
                           day: "numeric",
-                        })} · {calculateReadingTime(entry.body)}
+                        })} · {calculateReadingTime(entry.body ?? "")}
                       </p>
                       <p class="mt-2 max-w-[60ch] text-[1rem] leading-7 text-muted-foreground">{entry.data.description}</p>
                     </a>
                   </li>
                 ))}
               </ul>
-            </div>
           </section>
         ))}
       </div>

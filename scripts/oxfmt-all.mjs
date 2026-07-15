@@ -19,9 +19,21 @@ if (files.length === 0) {
 
 const oxfmtBin =
   process.platform === "win32"
-    ? path.join(process.cwd(), "node_modules", ".bin", "oxfmt.cmd")
+    ? path.join(process.cwd(), "node_modules", ".bin", "oxfmt.ps1")
     : path.join(process.cwd(), "node_modules", ".bin", "oxfmt");
 
-const args = [checkMode ? "--check" : "--write", ...files];
+const modeArg = checkMode ? "--check" : "--write";
+const chunkSize = process.platform === "win32" ? 40 : files.length;
 
-execFileSync(oxfmtBin, args, { stdio: "inherit" });
+for (let index = 0; index < files.length; index += chunkSize) {
+  const args = [modeArg, ...files.slice(index, index + chunkSize)];
+  if (process.platform === "win32") {
+    execFileSync(
+      "powershell.exe",
+      ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", oxfmtBin, ...args],
+      { stdio: "inherit" }
+    );
+  } else {
+    execFileSync(oxfmtBin, args, { stdio: "inherit" });
+  }
+}

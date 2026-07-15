@@ -29,6 +29,13 @@ const approach = entry.data.approach ?? entry.data.summary;
 const heroImage = entry.data.heroImage;
 const showBody = entry.data.showBody ?? false;
 const deploymentMatrix = entry.data.deploymentMatrix;
+type WorkMediaItem = {
+  src?: string;
+  label?: string;
+  title?: string;
+  description?: string;
+  href?: string;
+};
 
 const labels = {
   en: {
@@ -69,7 +76,7 @@ const labels = {
   },
 }[locale];
 
-const fallbackHighlights = [
+const fallbackHighlights: WorkMediaItem[] = [
   {
     title: entry.data.title,
     description: entry.data.summary,
@@ -91,7 +98,7 @@ const fallbackHighlights = [
     label: "04",
   },
 ];
-const highlights = entry.data.highlights.length > 0 ? entry.data.highlights : fallbackHighlights;
+const highlights: WorkMediaItem[] = entry.data.highlights.length > 0 ? entry.data.highlights : fallbackHighlights;
 
 const fallbackTimeline = [
   { label: "01. Discovery", date: entry.data.period },
@@ -117,7 +124,7 @@ const fallbackStoryBlocks = [
   },
 ];
 const storyBlocks = entry.data.storyBlocks.length > 0 ? entry.data.storyBlocks : fallbackStoryBlocks;
-const gallery = entry.data.gallery.length > 0 ? entry.data.gallery : Array.from({ length: 7 }, (_, index) => ({
+const gallery: WorkMediaItem[] = entry.data.gallery.length > 0 ? entry.data.gallery : Array.from({ length: 7 }, (_, index) => ({
   label: `${entry.data.title} ${index + 1}`,
 }));
 const isVideoSrc = (src?: string) => Boolean(src && /\.(mp4|webm|ogg|mov)$/i.test(src));

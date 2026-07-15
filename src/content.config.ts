@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 import { SITE } from "@/config";
 import { BLOG_CATEGORY_VALUES } from "@/data/blogCategories";
@@ -39,11 +40,13 @@ const storyBlockSchema = z.object({
 const deploymentMatrixSchema = z.object({
   title: z.string(),
   note: z.string().optional(),
-  rows: z.array(z.object({
-    deviceGroup: z.string(),
-    runtime: z.string(),
-    evaluation: z.string(),
-  })),
+  rows: z.array(
+    z.object({
+      deviceGroup: z.string(),
+      runtime: z.string(),
+      evaluation: z.string(),
+    }),
+  ),
 });
 
 const blog = defineCollection({

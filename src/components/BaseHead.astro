@@ -13,13 +13,15 @@ interface Props {
 const {
   title = SITE.title,
   description = SITE.desc,
-  image = "/images/og.png",
+  image = `/${SITE.ogImage}`,
   type = "website",
   canonicalURL = new URL(Astro.url.pathname, Astro.site),
 } = Astro.props;
 
 const fullTitle = title === SITE.title ? title : `${title} | ${SITE.title}`;
 const criticalCSS = getPageCriticalCSS(Astro.url.pathname);
+const socialImageURL = new URL(image, Astro.site);
+const socialImageAlt = `${SITE.title} - ${SITE.description}`;
 ---
 
 <!-- Global Metadata -->
@@ -64,7 +66,12 @@ const criticalCSS = getPageCriticalCSS(Astro.url.pathname);
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.site)} />
+<meta property="og:image" content={socialImageURL} />
+<meta property="og:image:secure_url" content={socialImageURL} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={socialImageAlt} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
@@ -72,7 +79,8 @@ const criticalCSS = getPageCriticalCSS(Astro.url.pathname);
 <meta name="twitter:creator" content={SITE.author} />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={new URL(image, Astro.site)} />
+<meta name="twitter:image" content={socialImageURL} />
+<meta name="twitter:image:alt" content={socialImageAlt} />
 
 <!-- Canonical -->
 <link rel="canonical" href={canonicalURL} />

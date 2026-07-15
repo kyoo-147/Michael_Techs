@@ -385,6 +385,25 @@ const wordCount = (post.body ?? "").split(/\s+/).length;
     const youtubeEmbedRegex = /\{% youtube (https:\/\/[^\s]+|[a-zA-Z0-9_-]+) %\}/g;
     
     let foundYoutubeEmbeds = false;
+    const isValidYouTubeId = (videoId) => /^[A-Za-z0-9_-]{11}$/.test(videoId);
+    const createYouTubeEmbed = (videoId) => {
+      if (!isValidYouTubeId(videoId)) return null;
+
+      const container = document.createElement("div");
+      container.className = "youtube-embed-container";
+
+      const iframe = document.createElement("iframe");
+      iframe.width = "560";
+      iframe.height = "315";
+      iframe.src = `https://www.youtube.com/embed/${videoId}`;
+      iframe.title = "YouTube video player";
+      iframe.frameBorder = "0";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+
+      container.appendChild(iframe);
+      return container;
+    };
     
     // Helper to extract a YouTube video ID from various URL formats
     const extractYouTubeId = (input) => {
@@ -411,21 +430,11 @@ const wordCount = (post.body ?? "").split(/\s+/).length;
       const ytMatch = text.match(/\{% youtube (https:\/\/[^\s]+|[a-zA-Z0-9_-]+) %\}/);
 
       if (ytMatch && ytMatch[1]) {
-        foundYoutubeEmbeds = true;
         const videoId = extractYouTubeId(ytMatch[1]);
-        const container = document.createElement("div");
-        container.className = "youtube-embed-container";
-        container.innerHTML = `
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/${videoId}"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
-        `;
+        const container = createYouTubeEmbed(videoId);
+        if (!container) return;
+
+        foundYoutubeEmbeds = true;
         p.replaceWith(container);
       }
     });
@@ -449,10 +458,12 @@ const wordCount = (post.body ?? "").split(/\s+/).length;
       let hasChanges = false;
 
       // Process YouTube embeds
-      content = content.replace(youtubeEmbedRegex, (match, videoId) => {
+      content = content.replace(youtubeEmbedRegex, (match, videoIdInput) => {
+        const videoId = extractYouTubeId(videoIdInput);
+        if (!isValidYouTubeId(videoId)) return match;
+
         foundYoutubeEmbeds = true;
         hasChanges = true;
-        videoId = extractYouTubeId(videoId);
 
         return `<div class="youtube-embed-container">
             <iframe
