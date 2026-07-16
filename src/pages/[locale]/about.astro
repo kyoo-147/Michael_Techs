@@ -16,9 +16,27 @@ const locale = Astro.params.locale as "vi" | "zh-cn";
 const t = useTranslations(locale);
 const posts = await getLocalizedFeaturedPosts(locale, 4);
 const work = await getLocalizedFeaturedWork(locale, 4);
+const aboutDescription =
+  locale === "vi"
+    ? "Giới thiệu Michael, kỹ sư AI workflow automation tại Việt Nam, xây dựng hệ thống AI thực dụng, computer vision, edge AI và phần mềm vận hành."
+    : "关于 Michael：来自越南的 AI workflow automation engineer，构建 practical AI systems、computer vision、edge AI 与业务自动化软件。";
+const aboutStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: t.about.title,
+  description: aboutDescription,
+  url: `${SITE.website}${locale}/about`,
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.website,
+    jobTitle: "AI workflow automation engineer",
+    sameAs: ["https://github.com/kyoo-147", "https://www.linkedin.com/in/minh-cuong-bui/"],
+  },
+};
 ---
 
-<Layout title={`${t.about.title} | ${SITE.title}`} description={t.about.intro} locale={locale}>
+<Layout title={`${t.about.title} | AI Workflow Automation Engineer`} description={aboutDescription} locale={locale} structuredData={aboutStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <AboutPageContent locale={locale} posts={posts} work={work} />

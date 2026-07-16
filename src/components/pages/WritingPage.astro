@@ -22,9 +22,32 @@ const t = useTranslations(locale);
 const grouped = Object.entries(
   getPostsByGroupCondition(posts, post => new Date(post.data.pubDatetime).getFullYear()),
 ).sort(([a], [b]) => Number(b) - Number(a));
+const pageDescription =
+  locale === "vi"
+    ? "Bài viết case study dễ đọc về AI engineering, workflow automation, computer vision, edge AI, document intelligence và xây dựng sản phẩm phần mềm."
+    : locale === "zh-cn"
+      ? "关于 AI engineering、workflow automation、computer vision、edge AI、document intelligence 与软件产品构建的案例式文章。"
+      : "Case-study writing on AI engineering, workflow automation, computer vision, edge AI, document intelligence, and software product development.";
+const localePrefix = locale === "en" ? "" : `${locale}/`;
+const writingStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: t.writing.title,
+  description: pageDescription,
+  url: `${SITE.website}${localePrefix}posts`,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: posts.slice(0, 12).map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.data.title,
+      url: `${SITE.website}${localePrefix}posts/${getPostSlug(entry.id)}`,
+    })),
+  },
+};
 ---
 
-<Layout title={`${t.writing.title} | ${SITE.title}`} description={t.writing.desc} locale={locale}>
+<Layout title={`${t.writing.title} | AI Engineering Case Studies`} description={pageDescription} locale={locale} structuredData={writingStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <section class="content-width pt-8">

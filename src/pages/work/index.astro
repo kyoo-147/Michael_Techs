@@ -2,12 +2,11 @@
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import { SITE } from "@/config";
-import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { getLocalizedPath } from "@/i18n/utils";
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedWork, getWorkSlug } from "@/utils/content";
 
 const locale = "en";
-const t = useTranslations(locale);
 const work = await getLocalizedWork(locale);
 const fallbackImages: Record<string, string> = {
   "oneclick-crm": "/assets/work-thumb-oneclick.png",
@@ -15,9 +14,27 @@ const fallbackImages: Record<string, string> = {
   "computer-vision-qc-system": "/assets/work-thumb-cv.png",
   "autonomous-vehicle-research": "/assets/work-thumb-av.png",
 };
+const workDescription =
+  "AI engineering case studies covering edge AI translation, agentic document intelligence, computer vision defect detection, AI workflow automation, and product systems.";
+const workStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "AI Engineering Projects",
+  description: workDescription,
+  url: `${SITE.website}work`,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: work.slice(0, 10).map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.data.title,
+      url: `${SITE.website}work/${getWorkSlug(entry.id)}`,
+    })),
+  },
+};
 ---
 
-<Layout title={`${t.work.title} | ${SITE.title}`} description={t.work.desc} locale={locale}>
+<Layout title="AI Engineering Projects | Michael" description={workDescription} locale={locale} structuredData={workStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <section class="content-width pt-8">
@@ -25,7 +42,7 @@ const fallbackImages: Record<string, string> = {
         Selected Work
       </h1>
       <p class="mt-5 max-w-[44rem] text-[1.06rem] leading-8 text-muted-foreground">
-        A selection of representative products and systems that I have designed, built, and distributed.
+        A selection of AI engineering projects across edge AI translation, agentic document intelligence, computer vision defect detection, workflow automation, and product systems.
       </p>
       <p class="mt-3 max-w-[44rem] text-[1.06rem] leading-8 text-muted-foreground">
         Something I haven't included here can sometimes be found in detail on <a href="https://github.com/kyoo-147" target="_blank" rel="noopener noreferrer" class="underline decoration-muted-foreground underline-offset-4 hover:text-accent hover:decoration-accent transition-colors">GitHub</a>, or sometimes I haven't been able to add it to my profile yet. Some projects are also business work, so I am not allowed to share their details publicly.

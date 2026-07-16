@@ -154,6 +154,79 @@ const gallery: WorkMediaItem[] = entry.data.gallery.length > 0 ? entry.data.gall
 const isVideoSrc = (src?: string) => Boolean(src && /\.(mp4|webm|ogg|mov)$/i.test(src));
 const ctaHref = entry.data.ctaHref ?? "/contact";
 const ctaLabel = entry.data.ctaLabel ?? labels.ctaButton;
+const relatedWritingBySlug: Record<string, { slug: string; label: Record<Locale, string> }[]> = {
+  "moyi-edge-translation": [
+    {
+      slug: "edge-ai-translation-system-multilingual-operations",
+      label: {
+        en: "How I built an edge AI translation system for multilingual operations",
+        vi: "Tôi xây dựng hệ thống edge AI translation cho vận hành đa ngôn ngữ như thế nào",
+        "zh-cn": "我是如何构建面向多语言运营的 edge AI translation system",
+      },
+    },
+  ],
+  "computer-vision-qc-system": [
+    {
+      slug: "computer-vision-defect-detection-pharmaceutical-blister-packs",
+      label: {
+        en: "Computer vision defect detection for pharmaceutical blister packs",
+        vi: "Computer vision defect detection cho vỉ thuốc pharmaceutical blister packs",
+        "zh-cn": "用于药品 blister packs 的 computer vision defect detection",
+      },
+    },
+  ],
+  "snow-ai-companion": [
+    {
+      slug: "design-safe-memory-ai-companion",
+      label: {
+        en: "How to design safe memory for AI companions",
+        vi: "Thiết kế safe memory cho AI companion như thế nào",
+        "zh-cn": "如何为 AI companions 设计 safe memory",
+      },
+    },
+  ],
+  dossier: [
+    {
+      slug: "agentic-document-intelligence-ocr-routing-review-repair",
+      label: {
+        en: "Agentic document intelligence: OCR, routing, review, and repair loops",
+        vi: "Agentic document intelligence: OCR, routing, review và repair loops",
+        "zh-cn": "Agentic document intelligence: OCR, routing, review 和 repair loops",
+      },
+    },
+    {
+      slug: "ai-workflow-automation-business-process-production-agent",
+      label: {
+        en: "AI workflow automation: from business process to production agent",
+        vi: "AI workflow automation: từ business process đến production agent",
+        "zh-cn": "AI workflow automation: 从 business process 到 production agent",
+      },
+    },
+  ],
+  sandora: [
+    {
+      slug: "ai-workflow-automation-business-process-production-agent",
+      label: {
+        en: "AI workflow automation: from business process to production agent",
+        vi: "AI workflow automation: từ business process đến production agent",
+        "zh-cn": "AI workflow automation: 从 business process 到 production agent",
+      },
+    },
+  ],
+  "everdock-desktop": [
+    {
+      slug: "ai-workflow-automation-business-process-production-agent",
+      label: {
+        en: "AI workflow automation: from business process to production agent",
+        vi: "AI workflow automation: từ business process đến production agent",
+        "zh-cn": "AI workflow automation: 从 business process 到 production agent",
+      },
+    },
+  ],
+};
+const relatedWriting = relatedWritingBySlug[slug] ?? [];
+const relatedWritingTitle =
+  locale === "vi" ? "Bài viết liên quan" : locale === "zh-cn" ? "相关文章" : "Related writing";
 const shareUrl = encodeURIComponent(canonicalURL.href);
 const shareTitle = encodeURIComponent(entry.data.title);
 const shareLabel =
@@ -520,6 +593,26 @@ const nextWorkLabel = locale === "vi" ? "Dự án tiếp theo" : locale === "zh-
           </button>
         </div>
       </section>
+
+      {
+        relatedWriting.length > 0 && (
+          <section class="mt-8 border-t border-border pt-6">
+            <h2 class="work-detail-heading">{relatedWritingTitle}</h2>
+            <ul class="space-y-3">
+              {relatedWriting.map(item => (
+                <li>
+                  <a
+                    href={getLocalizedPath(locale, `/posts/${item.slug}`)}
+                    class="inline-flex border-b border-border-strong pb-1 text-[1.02rem] text-foreground hover:border-accent hover:text-accent"
+                  >
+                    {item.label[locale]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
 
       <section class="mt-8 border border-border px-7 py-6">
         <div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">

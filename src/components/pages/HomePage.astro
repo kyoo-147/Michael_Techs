@@ -20,14 +20,25 @@ export interface Props {
 
 const { locale, posts, work } = Astro.props;
 const t = useTranslations(locale);
-const pageTitle = SITE.title;
+const pageTitle =
+  locale === "vi"
+    ? `Michael | Portfolio kỹ sư AI tại Việt Nam`
+    : locale === "zh-cn"
+      ? `Michael | 越南 AI 工程师作品集`
+      : `Michael | AI Engineer Portfolio in Vietnam`;
+const pageDescription =
+  locale === "vi"
+    ? "Portfolio của Michael, kỹ sư AI tại Việt Nam xây dựng hệ thống AI thực dụng, computer vision, edge AI, document intelligence và workflow automation."
+    : locale === "zh-cn"
+      ? "Michael 的 AI 工程师作品集，展示来自越南的 practical AI systems、computer vision、edge AI、document intelligence 与 workflow automation 项目。"
+      : "Michael is an AI engineer in Vietnam building practical AI systems, computer vision projects, edge AI translation, document intelligence, and workflow automation products.";
 const homeStructuredData = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE.title,
     url: SITE.website,
-    description: t.siteDescription,
+    description: pageDescription,
     inLanguage: locale,
     author: {
       "@type": "Person",
@@ -47,7 +58,7 @@ const homeStructuredData = [
     url: SITE.website,
     image: `${SITE.website}${SITE.ogImage}`,
     jobTitle: "Builder, engineer, and writer",
-    description: t.siteDescription,
+    description: pageDescription,
     sameAs: [CONTACT.github, CONTACT.linkedin],
   },
 ];
@@ -55,7 +66,7 @@ const workMoreLabel = locale === "vi" ? "Xem dự án" : locale === "zh-cn" ? "�
 const writingMoreLabel = locale === "vi" ? "Đọc bài viết" : locale === "zh-cn" ? "阅读文章" : "Read writing";
 ---
 
-<Layout title={pageTitle} description={t.siteDescription} locale={locale} structuredData={homeStructuredData}>
+<Layout title={pageTitle} description={pageDescription} locale={locale} structuredData={homeStructuredData}>
   <Header locale={locale} />
 
   <main class="site-shell pb-10">

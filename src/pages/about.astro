@@ -2,18 +2,32 @@
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import { SITE } from "@/config";
-import { useTranslations } from "@/i18n/utils";
 import Layout from "@/layouts/Layout.astro";
 import { getLocalizedFeaturedPosts, getLocalizedFeaturedWork } from "@/utils/content";
 import AboutPageContent from "@/components/pages/AboutPageContent.astro";
 
 const locale = "en";
-const t = useTranslations(locale);
 const posts = await getLocalizedFeaturedPosts(locale, 4);
 const work = await getLocalizedFeaturedWork(locale, 4);
+const aboutDescription =
+  "About Michael, an AI workflow automation engineer in Vietnam building practical AI systems, computer vision products, edge AI tools, and software for real-world operations.";
+const aboutStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About Michael",
+  description: aboutDescription,
+  url: `${SITE.website}about`,
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.website,
+    jobTitle: "AI workflow automation engineer",
+    sameAs: ["https://github.com/kyoo-147", "https://www.linkedin.com/in/minh-cuong-bui/"],
+  },
+};
 ---
 
-<Layout title={`${t.about.title} | ${SITE.title}`} description={t.about.intro} locale={locale}>
+<Layout title="About Michael | AI Workflow Automation Engineer" description={aboutDescription} locale={locale} structuredData={aboutStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <AboutPageContent locale={locale} posts={posts} work={work} />

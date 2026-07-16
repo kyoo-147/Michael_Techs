@@ -15,7 +15,7 @@ const posts = await getLocalizedPosts(locale);
 const tags = getUniqueTags(posts);
 ---
 
-<Layout title={`${t.tags.title} | ${SITE.title}`} description={t.tags.desc} locale={locale}>
+<Layout title={`${t.tags.title} | ${SITE.title}`} description={t.tags.desc} locale={locale} robots="noindex, follow">
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <section class="content-width pt-4">

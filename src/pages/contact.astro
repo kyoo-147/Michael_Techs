@@ -3,14 +3,27 @@ import ContactPage from "@/components/pages/ContactPage.astro";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import { SITE } from "@/config";
-import { useTranslations } from "@/i18n/utils";
 import Layout from "@/layouts/Layout.astro";
 
 const locale = "en";
-const t = useTranslations(locale);
+const contactDescription =
+  "Contact Michael for AI engineering, workflow automation, computer vision, OCR, edge AI, product systems, and technical collaboration.";
+const contactStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact Michael",
+  description: contactDescription,
+  url: `${SITE.website}contact`,
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    email: "mailto:navinservicesnv000@gmail.com",
+    url: SITE.website,
+  },
+};
 ---
 
-<Layout title={`${t.nav.contact} | ${SITE.title}`} description={SITE.description} locale={locale}>
+<Layout title="Contact Michael | AI Engineering Collaboration" description={contactDescription} locale={locale} structuredData={contactStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <ContactPage locale={locale} />

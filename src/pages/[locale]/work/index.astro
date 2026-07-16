@@ -43,9 +43,29 @@ const githubTail =
     : ", or sometimes I haven't been able to add it to my profile yet. Some projects are also business work, so I am not allowed to share their details publicly.";
 const viewCaseLabel = locale === "vi" ? "Xem case" : locale === "zh-cn" ? "查看案例" : "View case";
 const projectCountLabel = locale === "vi" ? "dự án" : locale === "zh-cn" ? "项目" : "projects";
+const seoDescription =
+  locale === "vi"
+    ? "Các case study kỹ thuật AI của Michael: edge AI translation, agentic document intelligence, computer vision defect detection, workflow automation và hệ thống sản phẩm."
+    : "Michael 的 AI 工程项目案例：edge AI translation、agentic document intelligence、computer vision defect detection、workflow automation 与产品系统。";
+const workStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: pageTitle,
+  description: seoDescription,
+  url: `${SITE.website}${locale}/work`,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: work.slice(0, 10).map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: entry.data.title,
+      url: `${SITE.website}${locale}/work/${getWorkSlug(entry.id)}`,
+    })),
+  },
+};
 ---
 
-<Layout title={`${t.work.title} | ${SITE.title}`} description={t.work.desc} locale={locale}>
+<Layout title={`${t.work.title} | AI Engineering Projects`} description={seoDescription} locale={locale} structuredData={workStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <section class="content-width pt-8">

@@ -33,7 +33,13 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => (SITE.showArchives ? true : !page.endsWith("/archives")),
+      filter: (page) => {
+        const url = new URL(page);
+        if (url.pathname.includes("/tags/") || url.pathname.endsWith("/tags")) {
+          return false;
+        }
+        return SITE.showArchives ? true : !url.pathname.endsWith("/archives");
+      },
       serialize: (item) => {
         if (item.url.endsWith("/") && item.url !== SITE.website + "/") {
           item.url = item.url.slice(0, -1);

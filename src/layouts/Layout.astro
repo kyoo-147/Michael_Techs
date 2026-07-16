@@ -12,6 +12,7 @@ export interface Props {
   canonicalURL?: string | URL;
   locale?: Locale;
   scrollSmooth?: boolean;
+  robots?: string;
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
@@ -22,6 +23,7 @@ const {
   ogType = "website",
   canonicalURL = Astro.url,
   locale = DEFAULT_LOCALE,
+  robots = "index, follow, max-image-preview:large",
   structuredData,
 } = Astro.props;
 
@@ -66,7 +68,7 @@ const structuredDataScripts = structuredDataItems.map(item =>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content={robots} />
     <meta name="theme-color" content="#f3eedf" />
     <meta name="title" content={title} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico?v=mc" />
@@ -93,7 +95,7 @@ const structuredDataScripts = structuredDataItems.map(item =>
     <meta property="twitter:url" content={canonical} />
     <meta property="twitter:image" content={socialImageURL} />
     <meta property="twitter:image:alt" content={socialImageAlt} />
-    {structuredDataScripts.map(script => <script type="application/ld+json" set:html={script} />)}
+    {structuredDataScripts.map(script => <script is:inline type="application/ld+json" set:html={script} />)}
   </head>
   <body>
     <div class="page-frame">

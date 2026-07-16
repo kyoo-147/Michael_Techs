@@ -25,7 +25,7 @@ const filteredPosts = getPostsByTag(posts, Astro.params.tag ?? "");
 const tagLabel = Astro.params.tag ?? "";
 ---
 
-<Layout title={`${tagLabel} | ${SITE.title}`} description={`${t.tags.postsTagged} ${tagLabel}`} locale={locale}>
+<Layout title={`${tagLabel} | ${SITE.title}`} description={`${t.tags.postsTagged} ${tagLabel}`} locale={locale} robots="noindex, follow">
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <section class="content-width pt-4">

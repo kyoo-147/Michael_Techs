@@ -13,9 +13,26 @@ export async function getStaticPaths() {
 
 const locale = Astro.params.locale as "vi" | "zh-cn";
 const t = useTranslations(locale);
+const contactDescription =
+  locale === "vi"
+    ? "Liên hệ Michael cho hợp tác AI engineering, workflow automation, computer vision, OCR, edge AI, hệ thống sản phẩm và tư vấn kỹ thuật."
+    : "联系 Michael，合作 AI engineering、workflow automation、computer vision、OCR、edge AI、产品系统与技术咨询。";
+const contactStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: t.nav.contact,
+  description: contactDescription,
+  url: `${SITE.website}${locale}/contact`,
+  mainEntity: {
+    "@type": "Person",
+    name: SITE.author,
+    email: "mailto:navinservicesnv000@gmail.com",
+    url: SITE.website,
+  },
+};
 ---
 
-<Layout title={`${t.nav.contact} | ${SITE.title}`} description={SITE.description} locale={locale}>
+<Layout title={`${t.nav.contact} | AI Engineering Collaboration`} description={contactDescription} locale={locale} structuredData={contactStructuredData}>
   <Header locale={locale} />
   <main class="site-shell pb-12">
     <ContactPage locale={locale} />
