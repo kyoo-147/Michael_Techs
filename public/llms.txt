@@ -2,18 +2,36 @@
 
 > Builder, engineer, and writer building practical AI systems, products, and software.
 
-Website: https://michaeltechs.xyz/
-About: https://michaeltechs.xyz/about
-Work: https://michaeltechs.xyz/work
-Writing: https://michaeltechs.xyz/posts
-Contact: https://michaeltechs.xyz/contact
-Resume: https://michaeltechs.xyz/Founder_BuiMinhCuong.pdf
+Michael's portfolio documents practical AI systems, edge AI projects, workflow automation, software products, and technical writing. The site is maintained by Michael for readers, collaborators, recruiters, and AI agents that need a concise map of the most useful public pages.
 
-Key topics:
+## Core Pages
+
+- [Home](https://michaeltechs.xyz/): Overview of Michael's work, writing, and current focus.
+- [About](https://michaeltechs.xyz/about): Background, skills, experience, and working style.
+- [Work](https://michaeltechs.xyz/work): Case studies for AI systems, automation, computer vision, and software products.
+- [Writing](https://michaeltechs.xyz/posts): Technical notes on AI engineering, system design, workflows, and production software.
+- [Contact](https://michaeltechs.xyz/contact): Public ways to contact Michael.
+- [Resume PDF](https://michaeltechs.xyz/Founder_BuiMinhCuong.pdf): Current resume file.
+
+## Selected Work
+
+- [MoYi Edge Translation](https://michaeltechs.xyz/work/moyi-edge-translation): Edge-first AI translation infrastructure for multilingual operations.
+- [Sandora](https://michaeltechs.xyz/work/sandora): AI Department OS for virtual teams, automated workflows, and governed operations.
+- [Dossier](https://michaeltechs.xyz/work/dossier): Agentic document intelligence for OCR, review, risk detection, and structured workflow automation.
+- [EverDock Desktop](https://michaeltechs.xyz/work/everdock-desktop): Desktop-first AI workstation for coding agents, sessions, terminals, approvals, and remote execution.
+- [Pharmaceutical QC Defect Detection Machine](https://michaeltechs.xyz/work/computer-vision-qc-system): Computer vision system for detecting pharmaceutical blister pack defects.
+- [Autopilot and FSD - BFMC](https://michaeltechs.xyz/work/autonomous-vehicle-research): ROS autonomous driving stack for Bosch Future Mobility Challenge research.
+
+## Selected Writing
+
+- [AI Agents should not start with agents, but with workflows](https://michaeltechs.xyz/posts/ai-agent-start-with-workflow): Why agent projects should begin from real workflow mapping.
+- [Designing a safe AI companion](https://michaeltechs.xyz/posts/ai-companion-safe-memory): Notes on memory, control, deletion, and human oversight for AI companions.
+- [Snow AI Companion safety](https://michaeltechs.xyz/posts/snow-ai-companion-safety): Design considerations for child-safe AI companion products.
+- [Why AI Engineers need to understand business workflows](https://michaeltechs.xyz/posts/ai-engineer-business-workflow): Connecting models, users, data, and business operations.
+
+## Topics
+
 - Practical AI systems and AI agents
 - Edge AI, computer vision, and applied machine learning
 - Workflow automation and software products
 - Product engineering, technical writing, and case studies
-
-Preferred citation:
-Michael - Builder, engineer, and writer building practical AI systems, products, and software.

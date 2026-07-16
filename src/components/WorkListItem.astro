@@ -26,6 +26,11 @@ const fallbackImages: Record<string, string> = {
   "autonomous-vehicle-research": "/assets/work-thumb-av.png",
 };
 const thumb = optimizedImages[slug] ?? entry.data.heroImage ?? fallbackImages[slug];
+const thumbSize = {
+  "computer-vision-qc-system": { width: 240, height: 165 },
+  dossier: { width: 240, height: 150 },
+  "autonomous-vehicle-research": { width: 240, height: 120 },
+}[slug] ?? { width: 240, height: 135 };
 ---
 
 <li class="border-t border-border py-5 first:border-t-0">
@@ -36,7 +41,15 @@ const thumb = optimizedImages[slug] ?? entry.data.heroImage ?? fallbackImages[sl
     <div class="flex h-[64px] items-center justify-center overflow-hidden border border-border bg-surface md:h-[70px]">
       {
         thumb ? (
-          <img src={thumb} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" width="420" height="236" />
+          <img
+            src={thumb}
+            alt=""
+            class="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+            width={thumbSize.width}
+            height={thumbSize.height}
+          />
         ) : (
           <span class="text-[0.74rem] uppercase tracking-[0.16em] text-subtle-foreground">
             {entry.data.heroLabel ?? "Case Study"}
