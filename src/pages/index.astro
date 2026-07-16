@@ -1,9 +1,9 @@
 ---
 import HomePage from "@/components/pages/HomePage.astro";
-import { getLocalizedFeaturedPosts, getLocalizedFeaturedWork } from "@/utils/content";
+import { getLocalizedFeaturedWork, getLocalizedRecentPosts } from "@/utils/content";
 
 const locale = "en";
-const posts = await getLocalizedFeaturedPosts(locale, 4);
+const posts = await getLocalizedRecentPosts(locale, 4);
 const work = await getLocalizedFeaturedWork(locale, 5);
 ---
 
