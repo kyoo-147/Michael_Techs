@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { SITE } from "@/config";
+import { CONTACT, SITE } from "@/config";
 import Card from "@/components/Card.astro";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
@@ -21,9 +21,41 @@ export interface Props {
 const { locale, posts, work } = Astro.props;
 const t = useTranslations(locale);
 const pageTitle = SITE.title;
+const homeStructuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.title,
+    url: SITE.website,
+    description: t.siteDescription,
+    inLanguage: locale,
+    author: {
+      "@type": "Person",
+      name: SITE.author,
+      url: `${SITE.website}about`,
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE.website}search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.website,
+    image: `${SITE.website}${SITE.ogImage}`,
+    jobTitle: "Builder, engineer, and writer",
+    description: t.siteDescription,
+    sameAs: [CONTACT.github, CONTACT.linkedin],
+  },
+];
+const workMoreLabel = locale === "vi" ? "Xem dự án" : locale === "zh-cn" ? "查看项目" : "View work";
+const writingMoreLabel = locale === "vi" ? "Đọc bài viết" : locale === "zh-cn" ? "阅读文章" : "Read writing";
 ---
 
-<Layout title={pageTitle} description={t.siteDescription} locale={locale}>
+<Layout title={pageTitle} description={t.siteDescription} locale={locale} structuredData={homeStructuredData}>
   <Header locale={locale} />
 
   <main class="site-shell pb-10">
@@ -55,14 +87,14 @@ const pageTitle = SITE.title;
 
     <section class="site-hairline mt-7 grid gap-12 pt-8 lg:grid-cols-2 lg:gap-16">
       <div>
-        <SectionHeading title={t.sections.selectedWork} href={getLocalizedPath(locale, "/work")} label="Learn more" />
+        <SectionHeading title={t.sections.selectedWork} href={getLocalizedPath(locale, "/work")} label={workMoreLabel} />
         <ul>
           {work.map(entry => <WorkListItem entry={entry} locale={locale} />)}
         </ul>
       </div>
 
       <div>
-        <SectionHeading title={t.sections.recentWriting} href={getLocalizedPath(locale, "/posts")} label="Learn more" />
+        <SectionHeading title={t.sections.recentWriting} href={getLocalizedPath(locale, "/posts")} label={writingMoreLabel} />
         <ul>
           {posts.map(entry => <Card entry={entry} locale={locale} />)}
         </ul>

@@ -1,0 +1,19 @@
+# Michael
+
+> Builder, engineer, and writer building practical AI systems, products, and software.
+
+Website: https://michaeltechs.xyz/
+About: https://michaeltechs.xyz/about
+Work: https://michaeltechs.xyz/work
+Writing: https://michaeltechs.xyz/posts
+Contact: https://michaeltechs.xyz/contact
+Resume: https://michaeltechs.xyz/Founder_BuiMinhCuong.pdf
+
+Key topics:
+- Practical AI systems and AI agents
+- Edge AI, computer vision, and applied machine learning
+- Workflow automation and software products
+- Product engineering, technical writing, and case studies
+
+Preferred citation:
+Michael - Builder, engineer, and writer building practical AI systems, products, and software.

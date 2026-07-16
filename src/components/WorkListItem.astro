@@ -12,13 +12,20 @@ export interface Props {
 
 const { entry, locale = DEFAULT_LOCALE } = Astro.props;
 const slug = getWorkSlug(entry.id);
+const optimizedImages: Record<string, string> = {
+  "moyi-edge-translation": "/work-thumbs/moyi-edge-translation.webp",
+  sandora: "/work-thumbs/sandora.webp",
+  dossier: "/work-thumbs/dossier.webp",
+  "autonomous-vehicle-research": "/work-thumbs/autonomous-vehicle-research.webp",
+  "computer-vision-qc-system": "/work-thumbs/computer-vision-qc-system.webp",
+};
 const fallbackImages: Record<string, string> = {
   "oneclick-crm": "/assets/work-thumb-oneclick.png",
   "snow-ai-companion": "/assets/work-thumb-snow.png",
   "computer-vision-qc-system": "/assets/work-thumb-cv.png",
   "autonomous-vehicle-research": "/assets/work-thumb-av.png",
 };
-const thumb = entry.data.heroImage ?? fallbackImages[slug];
+const thumb = optimizedImages[slug] ?? entry.data.heroImage ?? fallbackImages[slug];
 ---
 
 <li class="border-t border-border py-5 first:border-t-0">
@@ -29,7 +36,7 @@ const thumb = entry.data.heroImage ?? fallbackImages[slug];
     <div class="flex h-[64px] items-center justify-center overflow-hidden border border-border bg-surface md:h-[70px]">
       {
         thumb ? (
-          <img src={thumb} alt="" class="h-full w-full object-cover" loading="lazy" />
+          <img src={thumb} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" width="420" height="236" />
         ) : (
           <span class="text-[0.74rem] uppercase tracking-[0.16em] text-subtle-foreground">
             {entry.data.heroLabel ?? "Case Study"}

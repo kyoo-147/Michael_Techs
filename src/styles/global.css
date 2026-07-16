@@ -130,12 +130,12 @@
   }
 
   .surface-button-primary {
-    background: var(--accent);
+    background: #9f422c;
     color: #fff9f2;
   }
 
   .surface-button-primary:hover {
-    background: #b35537;
+    background: #853420;
   }
 
   .surface-button-ghost {

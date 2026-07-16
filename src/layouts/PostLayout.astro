@@ -5,7 +5,7 @@ import { SITE } from "@/config";
 import Footer from "@/components/Footer.astro";
 import Header from "@/components/Header.astro";
 import type { Locale } from "@/i18n/config";
-import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { getHtmlLang, getLocalizedPath, useTranslations } from "@/i18n/utils";
 import { getPostSlug } from "@/utils/content";
 import Layout from "./Layout.astro";
 import { calculateReadingTime } from "@/utils/readingTime";
@@ -29,6 +29,37 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
 const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
 
 const readTime = calculateReadingTime(post.body ?? "");
+const wordCount = (post.body ?? "").split(/\s+/).filter(Boolean).length;
+const postImage = post.data.heroImage ?? `${SITE.website}${SITE.ogImage}`;
+const postStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  image: new URL(postImage, SITE.website).toString(),
+  url: canonicalURL.href,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalURL.href,
+  },
+  datePublished: post.data.pubDatetime.toISOString(),
+  dateModified: (post.data.modDatetime ?? post.data.pubDatetime).toISOString(),
+  inLanguage: getHtmlLang(locale),
+  author: {
+    "@type": "Person",
+    name: post.data.author ?? SITE.author,
+    url: `${SITE.website}about`,
+  },
+  publisher: {
+    "@type": "Person",
+    name: SITE.author,
+    url: SITE.website,
+  },
+  keywords: post.data.tags.join(", "),
+  articleSection: post.data.tags[0] ?? "Technology",
+  wordCount,
+  timeRequired: readTime,
+};
 const dateString = post.data.pubDatetime.toLocaleDateString(
   locale === "vi" ? "vi-VN" : locale === "zh-cn" ? "zh-CN" : "en-US",
   {
@@ -52,7 +83,9 @@ const backToTopLabel = locale === "vi" ? "Lên đầu trang" : locale === "zh-cn
   title={`${post.data.title} | ${SITE.title}`}
   description={post.data.description}
   canonicalURL={canonicalURL}
+  ogType="article"
   locale={locale}
+  structuredData={postStructuredData}
 >
   <Header locale={locale} switcherPathname={getLocalizedPath(locale, `/posts/${getPostSlug(post.id)}`)} />
   <main class="site-shell pb-16 pt-10">
